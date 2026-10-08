@@ -24,21 +24,29 @@
   --step-2: 1.75rem;
   --step-3: clamp(2rem, 4vw, 3rem);
   --gutter: clamp(16px, 4vw, 40px);
+  /* code syntax colors, each at least 4.5:1 on the panel */
+  --syn-kw: #c2261b; --syn-str: #2c7a33; --syn-num: #2457c5; --syn-com: #6a6e72;
+  --syn-fn: #8a3ab0; --syn-type: #0a7080; --syn-punc: #4f5b70; --syn-var: #a84f00;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
     --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
+    --syn-kw: #ff7b70; --syn-str: #7fd88a; --syn-num: #82a8ff; --syn-com: #83888d;
+    --syn-fn: #d0a6ff; --syn-type: #5fd3dc; --syn-punc: #9fabc0; --syn-var: #ffad66;
   }
 }
 :root[data-theme="dark"] {
   --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
   --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
+  --syn-kw: #ff7b70; --syn-str: #7fd88a; --syn-num: #82a8ff; --syn-com: #83888d;
+  --syn-fn: #d0a6ff; --syn-type: #5fd3dc; --syn-punc: #9fabc0; --syn-var: #ffad66;
 }
 
-@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2?v=534e65bccd") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2?v=605231bee6") format("woff2"); font-weight: 100 700; font-display: swap; }
-@font-face { font-family: "Kerf Round"; src: url("fonts/KerfRound.woff2?v=ce39cbc72b") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2?v=7011add2b5") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2?v=b5dc00ae3d") format("woff2"); font-weight: 100 700; font-display: swap; }
+@font-face { font-family: "Kerf Round"; src: url("fonts/KerfRound.woff2?v=de77421628") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Text"; src: url("fonts/KerfText.woff2?v=bd8ee60dce") format("woff2"); font-weight: 100 900; font-display: swap; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -161,12 +169,31 @@ td.n { font-family: var(--mono); font-size: 0.875rem; font-variant-numeric: tabu
 .table-scroll { overflow-x: auto; }
 @media (max-width: 860px) { .curves { grid-template-columns: 1fr; } }
 
-/* sans */
-.display-line { font-size: clamp(2.5rem, 9vw, 7.5rem); line-height: 1; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+/* family: one section, a toggle for the four members. Each member keeps its
+   own panel in the DOM and is only hidden, so text a visitor edits in it
+   stays put while another member is shown. */
+#family { padding-top: 0; scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 52px); }
+.fam-bar { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 53px); z-index: 5; margin-bottom: 56px; border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--sheet) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.fam-bar .wrap { display: flex; align-items: center; gap: 12px 20px; min-height: 56px; }
+.fam-bar .seg { flex: none; }
+.fam-bar .seg button { font-size: 0.9375rem; padding: 6px 14px; }
+.fam-meta { margin-left: auto; font-size: var(--step--1); color: var(--ink-2); white-space: nowrap; }
+@media (max-width: 560px) { .fam-bar .seg { display: flex; width: 100%; } .fam-bar .seg button { flex: 1; padding-inline: 4px; } .fam-bar .kerf, .fam-meta { display: none; } }
+.fam { font-family: var(--face); }
+#fam-sans { --face: var(--sans); }
+#fam-round { --face: "Kerf Round", var(--sans); }
+#fam-text { --face: "Kerf Text", var(--sans); }
+#fam-mono { --face: var(--mono); font-family: var(--sans); }
+#fam-mono h2, #fam-mono .ladder .s { font-family: var(--face); }
+/* editable text shows a dashed score line on hover and while it has focus */
+.edit { cursor: text; outline: 1px dashed transparent; outline-offset: 4px; border-radius: 2px; transition: outline-color 0.12s ease; }
+.edit:hover { outline-color: var(--rule); }
+.edit:focus, .edit:focus-visible { outline: 1px dashed var(--score); outline-offset: 4px; }
+.display-line { font-size: clamp(2.5rem, 9vw, 7.5rem); line-height: 1; letter-spacing: -0.02em; overflow-wrap: anywhere; min-height: 1em; }
 .ladder { margin-top: 48px; border-top: 1px solid var(--rule); }
 .ladder-row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 16px; align-items: baseline; padding-block: 10px; border-bottom: 1px solid var(--rule); }
 .ladder-row .w { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-2); }
-.ladder-row .s { font-size: clamp(1.5rem, 3.6vw, 2.75rem); line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+.ladder-row .s { font-size: clamp(1.5rem, 3.6vw, 2.75rem); line-height: 1.15; min-height: 1.15em; white-space: nowrap; overflow: hidden; text-overflow: clip; outline-offset: 2px; }
 .reading { margin-top: 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
 .reading div p { font-size: var(--size, 1rem); }
 .reading .cap { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-2); margin-bottom: 10px; }
@@ -177,11 +204,15 @@ td.n { font-family: var(--mono); font-size: 0.875rem; font-variant-numeric: tabu
 .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--rule); overflow-x: auto; }
 .tabs button { font-family: var(--mono); font-size: var(--step--1); background: none; border: 0; border-right: 1px solid var(--rule); padding: 10px 16px; cursor: pointer; color: var(--ink-2); white-space: nowrap; }
 .tabs button[aria-selected="true"] { color: var(--ink); background: var(--sheet); box-shadow: inset 0 -2px 0 var(--cut); }
-.code { margin: 0; padding: 20px; font-family: var(--mono); font-size: clamp(0.8125rem, 1.4vw, 0.9375rem); line-height: 1.6; overflow-x: auto; tab-size: 4; }
-.code .k { font-weight: 650; }
-.code .c { color: var(--ink-2); font-weight: 300; }
-.code .s { color: var(--score); }
-.code .d { color: var(--cut); }
+.code { margin: 0; padding: 20px; font-family: var(--mono); font-size: clamp(0.8125rem, 1.4vw, 0.9375rem); line-height: 1.6; overflow-x: auto; tab-size: 4; color: var(--ink); }
+.code .k { color: var(--syn-kw); }
+.code .s { color: var(--syn-str); }
+.code .n { color: var(--syn-num); }
+.code .c { color: var(--syn-com); }
+.code .f { color: var(--syn-fn); }
+.code .t { color: var(--syn-type); }
+.code .p { color: var(--syn-punc); }
+.code .v { color: var(--syn-var); }
 .pairs { margin-top: 32px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
 .pair { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 16px 12px 12px; min-width: 0; }
 .pair .g { font-family: var(--mono); font-size: clamp(2rem, 4.4vw, 3.25rem); line-height: 1.1; letter-spacing: 0; white-space: pre; }
@@ -252,10 +283,13 @@ td.n { font-family: var(--mono); font-size: 0.875rem; font-variant-numeric: tabu
 .info dd { font-family: var(--mono); font-size: 0.8125rem; text-align: right; overflow-wrap: anywhere; }
 .info > :nth-last-child(-n+2) { border-bottom: 0; }
 
-/* tester */
+/* tester, inside the family section; it sets whichever member is selected */
+.try { margin-top: 72px; padding-top: 56px; border-top: 1px solid var(--rule); scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 120px); }
+.try .plate-head h3 { font-size: var(--step-2); line-height: 1.1; }
 .tester { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; align-items: start; }
-.sample { min-height: 320px; padding: 24px; border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); outline: none; overflow-wrap: anywhere; }
-.sample:focus-visible { border-color: var(--ink-2); }
+.sample { min-height: 320px; padding: 24px; border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); outline: none; overflow-wrap: anywhere; white-space: pre-wrap; }
+.sample:hover { outline: none; border-color: var(--ink-2); }
+.sample:focus, .sample:focus-visible { outline: none; border-color: var(--score); }
 .panel { display: grid; gap: 18px; font-size: 0.875rem; }
 .panel .row { display: grid; gap: 6px; }
 .panel .row > div:first-child { display: flex; justify-content: space-between; }
@@ -285,11 +319,9 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     <a class="brand" href="#top"><b>Kerf</b><span>v0.1</span></a>
     <nav aria-label="Sections">
       <a href="#curves">Curves</a>
-      <a href="#sans">Sans</a>
-      <a href="#round">Round</a>
-      <a href="#mono">Mono</a>
-      <a href="#glyphs">Glyphs</a>
+      <a href="#family">Family</a>
       <a href="#try">Try</a>
+      <a href="#glyphs">Glyphs</a>
       <a href="#specs">Specs</a>
       <a href="/map">Map</a>
       <a href="/convert">Convert</a>
@@ -320,8 +352,8 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
 
     <div class="intro">
       <div>
-        <h1>Squared curves and straight cuts, in a sans and a mono.</h1>
-        <p class="lede">Kerf Sans is a sans serif for interfaces and text. Kerf Mono is its monospace for code and terminals. Both share one skeleton: superellipse bowls, horizontal terminals, square punctuation, and round letters as wide as straight ones.</p>
+        <h1>Squared curves and straight cuts, in four members.</h1>
+        <p class="lede">Kerf Sans is a sans serif for interfaces. Kerf Round has geometric bowls and rounded vertices. Kerf Text is the reading member, smaller and softer. Kerf Mono is the monospace for code and terminals. All four share one skeleton: level cuts on c, e, s and a, a g tail that mirrors its bowl, and y and t tails that end in vertical cuts.</p>
         <p class="def">kerf (n.) the width of material removed by a saw blade or a laser.</p>
       </div>
       <dl class="facts" id="facts"></dl>
@@ -360,55 +392,101 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     </div>
   </section>
 
-  <section class="plate" id="sans">
-    <div class="wrap">
-      <div class="plate-head">
-        <h2>Kerf Sans</h2>
-        <p>Inter's spacing, coverage and features, moved toward Camber's geometry. Nine weights from Thin to Black on one variable axis. From SemiBold up it runs heavier than Inter at the same value.</p>
-      </div>
-      <div class="display-line" id="display" style="font-weight:700">Quartz glyphs, cut square.</div>
-      <div class="ladder" id="ladder"></div>
-      <div class="reading">
-        <div><div class="cap">15 px / 400</div><p style="font-size:15px;line-height:1.55">A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again. Typefaces are cut too, from older shapes, and each recut leaves its own mark.</p></div>
-        <div><div class="cap">18 px / 400</div><p style="font-size:18px;line-height:1.5">Kerf keeps Inter's spacing and language coverage so it reads at text sizes. The squared bowls show up from about 24 pixels.</p></div>
-        <div><div class="cap">24 px / 600</div><p style="font-size:24px;line-height:1.3;font-weight:600">Settings, Billing, Members, Usage, API keys.</p></div>
+  <section class="plate" id="family" aria-label="The Kerf family">
+    <div class="fam-bar">
+      <div class="wrap">
+        <div class="seg" role="group" aria-label="Family" id="ffam">
+          <button type="button" data-v="sans" aria-pressed="true" aria-controls="fam-sans" style="font-family:'Kerf Sans', var(--sans)"><span class="kerf">Kerf </span>Sans</button>
+          <button type="button" data-v="round" aria-pressed="false" aria-controls="fam-round" style="font-family:'Kerf Round', var(--sans)"><span class="kerf">Kerf </span>Round</button>
+          <button type="button" data-v="text" aria-pressed="false" aria-controls="fam-text" style="font-family:'Kerf Text', var(--sans)"><span class="kerf">Kerf </span>Text</button>
+          <button type="button" data-v="mono" aria-pressed="false" aria-controls="fam-mono" style="font-family:var(--mono)"><span class="kerf">Kerf </span>Mono</button>
+        </div>
+        <span class="fam-meta mono num" id="fmeta"></span>
       </div>
     </div>
-  </section>
-
-  <section class="plate" id="round" style="font-family: 'Kerf Round', var(--sans)">
     <div class="wrap">
-      <div class="plate-head">
-        <h2>Kerf Round</h2>
-        <p>The geometric member. It keeps Inter's proportions, spacing and weights, squares its bowls a little less than Kerf Sans, and rounds every outer vertex: stem ends, terminals and apexes. Kerf's figures, the compact f, a G with a spur and level cuts on c, e, s, a and g. Nine weights from Thin to Black.</p>
+      <div class="fam" id="fam-sans" data-fam="sans">
+        <div class="plate-head">
+          <h2>Kerf Sans</h2>
+          <p>Inter's spacing, coverage and features, moved toward Camber's geometry. Nine weights from Thin to Black on one variable axis. From SemiBold up it runs heavier than Inter at the same value.</p>
+        </div>
+        <div class="display-line edit" style="font-weight:700" aria-label="Kerf Sans display line, editable">Quartz glyphs, cut square.</div>
+        <div class="ladder" id="ladder-sans"></div>
+        <div class="reading">
+          <div><div class="cap">15 px / 400</div><p class="edit" style="font-size:15px;line-height:1.55">A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again. Typefaces are cut too, from older shapes, and each recut leaves its own mark.</p></div>
+          <div><div class="cap">18 px / 400</div><p class="edit" style="font-size:18px;line-height:1.5">Kerf keeps Inter's spacing and language coverage so it reads at text sizes. The squared bowls show up from about 24 pixels.</p></div>
+          <div><div class="cap">24 px / 600</div><p class="edit" style="font-size:24px;line-height:1.3;font-weight:600">Settings, Billing, Members, Usage, API keys.</p></div>
+        </div>
       </div>
-      <div class="display-line" style="font-weight:600">Good type, plainly spoken.</div>
-      <div class="ladder" id="ladder-round"></div>
-      <div class="reading">
-        <div><div class="cap">15 px / 400</div><p style="font-size:15px;line-height:1.55">Kerf Round is built for the places where a typeface should not be noticed first: dashboards, settings pages, long documents and the labels on buttons. It keeps Inter's coverage and features, and its weights line up with Kerf Sans.</p></div>
-        <div><div class="cap">18 px / 400</div><p style="font-size:18px;line-height:1.5">Its bowls sit between Inter and Kerf Sans, and its corners are rounded at a fifth of a stem, so it reads as geometric and soft at once.</p></div>
-        <div><div class="cap">24 px / 600</div><p style="font-size:24px;line-height:1.3;font-weight:600">Invite team, Export CSV, Upgrade plan.</p></div>
-      </div>
-    </div>
-  </section>
 
-  <section class="plate" id="mono">
-    <div class="wrap">
-      <div class="plate-head">
-        <h2>Kerf Mono</h2>
-        <p>Kerf Sans fitted to a cell 1280 units wide, 0.625 em. Letters fill the cell evenly with their stems held, m and w run nearly edge to edge, f, t and r reach out on their arms, and every character that could be mistaken for another has its own shape. Seven weights from Thin to Bold.</p>
+      <div class="fam" id="fam-round" data-fam="round" hidden>
+        <div class="plate-head">
+          <h2>Kerf Round</h2>
+          <p>The geometric member. It keeps Inter's proportions, spacing and weights, squares its bowls a little less than Kerf Sans, and rounds every outer vertex: stem ends, terminals and apexes. Kerf's figures, the compact f, a G with a spur and level cuts on c, e, s, a and g. Nine weights from Thin to Black.</p>
+        </div>
+        <div class="display-line edit" style="font-weight:600" aria-label="Kerf Round display line, editable">Good type, plainly spoken.</div>
+        <div class="ladder" id="ladder-round"></div>
+        <div class="reading">
+          <div><div class="cap">15 px / 400</div><p class="edit" style="font-size:15px;line-height:1.55">Kerf Round is built for the places where a typeface should not be noticed first: dashboards, settings pages, long documents and the labels on buttons. It keeps Inter's coverage and features, and its weights line up with Kerf Sans.</p></div>
+          <div><div class="cap">18 px / 400</div><p class="edit" style="font-size:18px;line-height:1.5">Its bowls sit between Inter and Kerf Sans, and its corners are rounded at a fifth of a stem, so it reads as geometric and soft at once.</p></div>
+          <div><div class="cap">24 px / 600</div><p class="edit" style="font-size:24px;line-height:1.3;font-weight:600">Invite team, Export CSV, Upgrade plan.</p></div>
+        </div>
       </div>
-      <div class="editor">
-        <div class="tabs" role="tablist" id="tabs"></div>
-        <pre class="code" id="code"></pre>
+
+      <div class="fam" id="fam-text" data-fam="text" hidden>
+        <div class="plate-head">
+          <h2>Kerf Text</h2>
+          <p>The reading member. It drops the squaring and moves Inter toward PP Mori's proportions: every glyph is 4 percent smaller on the same line height, the spacing is tighter, round letters and capitals are wider, and c, e, s, a and g are cut level. Nine weights from Thin to Black, with the heavy weights lighter than Inter's.</p>
+        </div>
+        <div class="display-line edit" style="font-weight:500" aria-label="Kerf Text display line, editable">Rounder bowls, level cuts.</div>
+        <div class="reading">
+          <div><div class="cap">14 px / 400</div><p class="edit" style="font-size:14px;line-height:1.6">A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again. Typefaces are cut too, from older shapes, and each recut leaves its own mark.</p></div>
+          <div><div class="cap">16 px / 400</div><p class="edit" style="font-size:16px;line-height:1.6">The a is redrawn: its bowl has a level top that meets the stem square, and its stem ends in a foot with a vertical cut. O and Q are 5 percent wider than Inter's, H 4 percent, o 3 percent. Its 1 has a long flag and its G has a spur.</p></div>
+          <div><div class="cap">20 px / 400</div><p class="edit" style="font-size:20px;line-height:1.5">Weight 700 in Kerf Text is Inter's 640, and 800 is Inter's 760.</p></div>
+        </div>
+        <div class="ladder" id="ladder-text"></div>
       </div>
-      <div class="pairs" id="pairs"></div>
-      <div class="term">
-        <pre id="term" aria-label="A build report drawn with box-drawing characters"></pre>
-        <div>
-          <h3>Box drawing</h3>
-          <p class="muted" style="margin-top:8px;margin-bottom:20px">All 160 characters from U+2500 to U+259F are generated from their Unicode names. Lines run the full line height, so they join across rows at a line height of 1.21. Rounded corners use the letters' squared curve.</p>
-          <div class="boxgrid" id="boxgrid" aria-label="Box drawing and block elements"></div>
+
+      <div class="fam" id="fam-mono" data-fam="mono" hidden>
+        <div class="plate-head">
+          <h2>Kerf Mono</h2>
+          <p>Kerf Sans fitted to a cell 1280 units wide, 0.625 em. Letters fill the cell evenly with their stems held, m and w run nearly edge to edge, f, t and r reach out on their arms, and every character that could be mistaken for another has its own shape. Seven weights from Thin to Bold.</p>
+        </div>
+        <div class="editor">
+          <div class="tabs" role="tablist" id="tabs" aria-label="Code samples"></div>
+          <pre class="code" id="code" role="tabpanel"></pre>
+        </div>
+        <div class="ladder" id="ladder-mono"></div>
+        <div class="pairs" id="pairs"></div>
+        <div class="term">
+          <pre id="term" aria-label="A build report drawn with box-drawing characters"></pre>
+          <div>
+            <h3>Box drawing</h3>
+            <p class="muted" style="margin-top:8px;margin-bottom:20px">All 160 characters from U+2500 to U+259F are generated from their Unicode names. Lines run the full line height, so they join across rows at a line height of 1.21. Rounded corners use the letters' squared curve.</p>
+            <div class="boxgrid" id="boxgrid" aria-label="Box drawing and block elements"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="try" id="try">
+        <div class="plate-head">
+          <h3>Try <span id="tname">Kerf Sans</span></h3>
+          <p>Type anything. The lines above are editable too, and each member keeps its own edits and settings when you switch. Every OpenType feature in the panel is live.</p>
+        </div>
+        <div class="tester">
+          <div>
+            <div class="sample edit" id="sample-sans" data-fam="sans" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Sans, editable">Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
+            <div class="sample edit" id="sample-round" data-fam="round" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Round, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
+            <div class="sample edit" id="sample-text" data-fam="text" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Text, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). Kerf Text cuts c, e, s, a and g level, and its a has a level bowl top and a foot. A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again.</div>
+            <div class="sample edit" id="sample-mono" data-fam="mono" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Mono, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
+          </div>
+          <div class="panel">
+            <div class="row"><div><label for="ts">Size</label><output id="tso">44 px</output></div><input id="ts" type="range" min="12" max="160" value="44"></div>
+            <div class="row"><div><label for="tw">Weight</label><output id="two">400</output></div><input id="tw" type="range" min="100" max="900" value="400"></div>
+            <div class="row"><div><label for="tl">Line height</label><output id="tlo">1.20</output></div><input id="tl" type="range" min="0.9" max="2" step="0.01" value="1.2"></div>
+            <div class="row"><div><label for="tt">Letter spacing</label><output id="tto">0%</output></div><input id="tt" type="range" min="-6" max="12" step="0.5" value="0"></div>
+            <div class="row"><div><span>Features</span></div><div class="feats" id="feats"></div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -418,12 +496,13 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     <div class="wrap">
       <div class="plate-head">
         <h2>Glyphs</h2>
-        <p id="glyphs-lede">Every character in both fonts, cut into the inside of a cylinder in code point order. Drag to turn, scroll to move between rows, and click a glyph to pull it out of the wall.</p>
+        <p id="glyphs-lede">Every character in each member, cut into the inside of a cylinder in code point order. Drag to turn, scroll to move between rows, and click a glyph to pull it out of the wall.</p>
       </div>
       <div class="glyph-tools">
         <div class="seg" role="group" aria-label="Family" id="gfam">
           <button type="button" data-v="sans" aria-pressed="true">Sans</button>
           <button type="button" data-v="round" aria-pressed="false">Round</button>
+          <button type="button" data-v="text" aria-pressed="false">Text</button>
           <button type="button" data-v="mono" aria-pressed="false">Mono</button>
         </div>
         <div class="chips" id="gfilter" role="group" aria-label="Filter"></div>
@@ -468,30 +547,6 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     </div>
   </section>
 
-  <section class="plate" id="try">
-    <div class="wrap">
-      <div class="plate-head">
-        <h2>Try it</h2>
-        <p>Type anything. Every OpenType feature in the panel is live.</p>
-      </div>
-      <div class="tester">
-        <div class="sample" id="sample" contenteditable="true" spellcheck="false" aria-label="Sample text, editable">Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
-        <div class="panel">
-          <div class="seg" role="group" aria-label="Family" id="tfam">
-            <button type="button" data-v="sans" aria-pressed="true">Sans</button>
-            <button type="button" data-v="round" aria-pressed="false">Round</button>
-            <button type="button" data-v="mono" aria-pressed="false">Mono</button>
-          </div>
-          <div class="row"><div><label for="ts">Size</label><output id="tso">44 px</output></div><input id="ts" type="range" min="12" max="160" value="44"></div>
-          <div class="row"><div><label for="tw">Weight</label><output id="two">400</output></div><input id="tw" type="range" min="100" max="900" value="400"></div>
-          <div class="row"><div><label for="tl">Line height</label><output id="tlo">1.20</output></div><input id="tl" type="range" min="0.9" max="2" step="0.01" value="1.2"></div>
-          <div class="row"><div><label for="tt">Letter spacing</label><output id="tto">0%</output></div><input id="tt" type="range" min="-6" max="12" step="0.5" value="0"></div>
-          <div class="row"><div><span>Features</span></div><div class="feats" id="feats"></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="plate" id="specs">
     <div class="wrap">
       <div class="plate-head">
@@ -524,7 +579,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   </div>
 </footer>
 
-<script src="data.js?v=624c07dde3"></script>
+<script src="data.js?v=98b8440525"></script>
 <script>
 (() => {
   const D = window.KERF;
@@ -542,6 +597,11 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   const paintAllRanges = () => document.querySelectorAll('input[type="range"]').forEach(paintRange);
   const M = D.sans.metrics;
   const fmt = (n) => n.toLocaleString("en-US");
+  // the four members in toggle order; a member missing from data.js is left out
+  const FAMS = ["sans", "round", "text", "mono"].filter((f) => D[f]);
+  const FNAME = { sans: "Kerf Sans", round: "Kerf Round", text: "Kerf Text", mono: "Kerf Mono" };
+  const famFont = (f) => `"${FNAME[f]}"`;
+  const weights = (f) => D[f].metrics.weights || (f === "mono" ? [100, 700] : [100, 900]);
   const lerp = (a, b, t) => a + (b - a) * t;
 
   /* ---------- outline helpers ---------- */
@@ -691,6 +751,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   const facts = [
     ["Kerf Sans", `${fmt(S.glyphs)} glyphs`], ["Sans weights", "100–900"],
     ["Kerf Round", `${fmt(D.round.metrics.glyphs)} glyphs`], ["Round weights", "100–900"],
+    ["Kerf Text", `${fmt(D.text.metrics.glyphs)} glyphs`], ["Text weights", "100–900"],
     ["Kerf Mono", `${fmt(Mo.glyphs)} glyphs`], ["Mono weights", "100–700"],
     ["Mono cell", `${Mo.cell} / ${Mo.upm}`], ["Format", "Variable TTF, WOFF2"],
     ["License", "SIL OFL 1.1"], ["Version", D.version],
@@ -742,12 +803,15 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     }
   })();
 
-  /* ---------- sans ---------- */
+  /* ---------- family ladders ---------- */
+  // one row per named weight inside the member's own range
   const NAMES = { 100: "Thin", 200: "ExtraLight", 300: "Light", 400: "Regular", 500: "Medium", 600: "SemiBold", 700: "Bold", 800: "ExtraBold", 900: "Black" };
-  $("#ladder-round").innerHTML = Object.entries(NAMES).map(([w, n]) =>
-    `<div class="ladder-row"><span class="w">${n} ${w}</span><span class="s" style="font-weight:${w}">Afternoon light, 0123456789</span></div>`).join("");
-  $("#ladder").innerHTML = Object.entries(NAMES).map(([w, n]) =>
-    `<div class="ladder-row"><span class="w">${n} ${w}</span><span class="s" style="font-weight:${w}">Hamburgefontsiv 0123456789</span></div>`).join("");
+  const LADDER = { sans: "Hamburgefontsiv 0123456789", round: "Afternoon light, 0123456789", text: "Handgloves 0123456789", mono: "Hamburgefontsiv 0O0 1lI" };
+  for (const f of FAMS) {
+    const [lo, hi] = weights(f);
+    $(`#ladder-${f}`).innerHTML = Object.entries(NAMES).filter(([w]) => +w >= lo && +w <= hi).map(([w, n]) =>
+      `<div class="ladder-row"><span class="w">${n} ${w}</span><span class="s edit" style="font-weight:${w}">${LADDER[f]}</span></div>`).join("");
+  }
 
   /* ---------- mono code ---------- */
   const SNIPPETS = {
@@ -799,22 +863,112 @@ if [[ "$which" == sans || "$which" == all ]]; then
     --output-path 'fonts/sans/KerfSans[wght].ttf' --flatten-components
 fi` },
   };
-  const KW = {
-    py: /\b(def|for|in|if|is|None|return|continue|else|and|or|not|from|import|class)\b/,
-    sh: /\b(if|then|fi|set|cd|mkdir|for|do|done)\b/,
-  };
-  function highlight(src, lang) {
-    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-    const re = new RegExp(`(#.*$)|("[^"\\n]*"|'[^'\\n]*')|${KW[lang].source}|\\b(\\d+(?:\\.\\d+)?)\\b`, "gm");
-    let out = "", last = 0, m;
-    while ((m = re.exec(src))) {
-      out += esc(src.slice(last, m.index));
-      const cls = m[1] ? "c" : m[2] ? "s" : m[3] ? "k" : "d";
-      out += `<span class="${cls}">${esc(m[0])}</span>`;
-      last = re.lastIndex;
+  /* Syntax colors. A small lexer per language splits the source into tokens:
+     k keyword, s string, n number, c comment, f function or command, t type or
+     option, p punctuation, v variable or constant. Other names stay in ink. */
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const PY_KW = new Set("def class return if elif else for while in is not and or import from as with try except finally raise pass break continue lambda yield global nonlocal assert del async await None True False".split(" "));
+  const PY_TYPES = new Set("int str float bool bytes dict list tuple set frozenset object".split(" "));
+  const PY_RULES = [
+    ["c", /#[^\n]*/y],
+    ["s", /[rbfuRBFU]{0,2}(?:"""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')/y],
+    ["n", /(?:0[xXoObB][\da-fA-F_]+|\d[\d_]*(?:\.\d+)?(?:[eE][-+]?\d+)?)(?![\w.])/y],
+    ["id", /[A-Za-z_]\w*/y],
+    ["p", /->|\*\*=?|\/\/=?|[-+*\/%=<>!&|^~@]=?|[()[\]{}.,:;]/y],
+    ["", /\s+|./y],
+  ];
+  function lexPy(src) {
+    const toks = [];
+    for (let i = 0; i < src.length;) {
+      for (const [t, re] of PY_RULES) {
+        re.lastIndex = i;
+        const m = re.exec(src);
+        if (m && m[0]) { toks.push([t, m[0]]); i += m[0].length; break; }
+      }
     }
-    return out + esc(src.slice(last));
+    // a name is classed by what it is and by the tokens on either side of it
+    const sig = [];
+    toks.forEach((x, i) => { if (x[0] || x[1].trim()) sig.push(i); });
+    sig.forEach((ti, k) => {
+      const tok = toks[ti];
+      if (tok[0] !== "id") return;
+      const v = tok[1], prev = toks[sig[k - 1]]?.[1], next = toks[sig[k + 1]]?.[1];
+      tok[0] = PY_KW.has(v) ? "k"
+        : prev === "def" ? "f"
+        : prev === "class" ? "t"
+        : PY_TYPES.has(v) || /^[A-Z]\w*[a-z]\w*$/.test(v) ? "t"
+        : /^[A-Z][A-Z0-9_]*$/.test(v) ? "v"
+        : next === "(" ? "f" : "";
+    });
+    return toks;
   }
+  const SH_KW = new Set("if then else elif fi for in do done while until case esac function select return".split(" "));
+  const SH_VAR = /\$(?:\{[^}\n]*\}|[A-Za-z_]\w*|[0-9#?@*$!-])/y;
+  function lexSh(src) {
+    const toks = [], push = (t, v) => { if (v) toks.push([t, v]); };
+    const at = (re, j) => { re.lastIndex = j; const m = re.exec(src); return m ? m[0] : ""; };
+    // a double-quoted string; variables and $( ) inside it keep their own colors
+    function quoted(j) {
+      let buf = '"';
+      for (j++; j < src.length && src[j] !== '"';) {
+        if (src[j] === "\\") { buf += src.slice(j, j + 2); j += 2; continue; }
+        if (src.startsWith("$(", j)) {
+          push("s", buf); buf = ""; push("p", "$(");
+          j = run(j + 2, true);
+          if (src[j] === ")") { push("p", ")"); j++; }
+          continue;
+        }
+        const v = src[j] === "$" ? at(SH_VAR, j) : "";
+        if (v) { push("s", buf); buf = ""; push("v", v); j += v.length; continue; }
+        buf += src[j++];
+      }
+      push("s", buf + (j < src.length ? '"' : ""));
+      return j + 1;
+    }
+    // commands up to the end of the source, or to the ) that closes a $( )
+    function run(j, inner) {
+      let cmd = true;  // the next word names a command
+      while (j < src.length) {
+        const c = src[j];
+        let w;
+        if (inner && c === ")") return j;
+        if (c === "\n") { push("", c); j++; cmd = true; }
+        else if ((w = at(/[ \t]+/y, j))) { push("", w); j += w.length; }
+        else if (c === "#" && (j === 0 || /\s/.test(src[j - 1]))) { w = at(/#[^\n]*/y, j); push("c", w); j += w.length; }
+        else if (c === '"') { j = quoted(j); cmd = false; }
+        else if (c === "'") { w = at(/'[^']*'?/y, j); push("s", w); j += w.length; cmd = false; }
+        else if (src.startsWith("$(", j)) {
+          push("p", "$("); j = run(j + 2, true);
+          if (src[j] === ")") { push("p", ")"); j++; }
+          cmd = false;
+        }
+        else if (c === "$" && (w = at(SH_VAR, j))) { push("v", w); j += w.length; cmd = false; }
+        else if (c === "\\") { push("p", src.slice(j, j + 2)); j += 2; }
+        else if ((w = at(/&&|\|\||;;|\[\[|\]\]|[=!]=|[|;&<>(){}[\]=]/y, j))) {
+          push("p", w); j += w.length;
+          if (/^(&&|\|\||;;?|\||\(|\{)$/.test(w)) cmd = true;
+        } else {
+          w = at(/[^\s"'$|;&<>(){}[\]=\\]+/y, j) || c;
+          j += w.length;
+          if (cmd && src[j] === "=" && /^[A-Za-z_]\w*$/.test(w)) {
+            // NAME=value: the value is a word, not a command
+            push("v", w); push("p", "="); j++;
+            const val = at(/[^\s"'$|;&<>(){}]+/y, j);
+            push("", val); j += val.length;
+          } else if (SH_KW.has(w)) { push("k", w); cmd = /^(if|then|else|elif|do|while|until)$/.test(w); }
+          else if (cmd) { push("f", w); cmd = false; }
+          else if (w[0] === "-") push("t", w);
+          else if (/^\d+$/.test(w)) push("n", w);
+          else push("", w);
+        }
+      }
+      return j;
+    }
+    run(0, false);
+    return toks;
+  }
+  const LEX = { py: lexPy, sh: lexSh };
+  const highlight = (src, lang) => LEX[lang](src).map(([t, v]) => (t ? `<span class="${t}">${esc(v)}</span>` : esc(v))).join("");
   const tabs = $("#tabs"), code = $("#code");
   Object.keys(SNIPPETS).forEach((name, i) => {
     const b = document.createElement("button");
@@ -856,8 +1010,6 @@ fi` },
   const gstate = { fam: "sans", filter: "all", view: "wall", cp: 0x52, w: 400 };
   const GROUPS = ["all", "letters", "figures", "punctuation", "symbols", "marks", "drawing"];
   const cells = $("#cells"), insp = $("#insp"), ginfo = $("#ginfo");
-  const FAMILY = { sans: '"Kerf Sans"', round: '"Kerf Round"', mono: '"Kerf Mono"' };
-  const famFont = (f) => FAMILY[f];
   const hex = (cp) => cp.toString(16).toUpperCase().padStart(4, "0");
   const show = (cp) => (cp >= 0x300 && cp <= 0x36f ? "◌" : "") + String.fromCodePoint(cp);
   const glyphList = () => D[gstate.fam].chars.filter((c) => gstate.filter === "all" || c[3] === gstate.filter);
@@ -932,8 +1084,9 @@ fi` },
     wall?.setActive(v === "wall");
   }
   const gw = $("#gw");
+  for (const b of $("#gfam").querySelectorAll("button")) if (!D[b.dataset.v]) b.hidden = true;
   segWire("#gfam", (v) => {
-    gstate.fam = v; gw.max = v === "mono" ? 700 : 900; paintRange(gw);
+    gstate.fam = v; gw.max = weights(v)[1]; paintRange(gw);
     if (gstate.w > +gw.max) { gstate.w = +gw.max; gw.value = gstate.w; $("#gwo").textContent = gstate.w; }
     if (!D[v].chars.some((c) => c[3] === gstate.filter)) gstate.filter = "all";
     renderFilter(); renderCells(); wall?.rebuild();
@@ -1453,58 +1606,118 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
     if (w) return;
     // no WebGPU: the grid is the whole library
     $("#gview").hidden = true;
-    $("#glyphs-lede").textContent = "Every character in both fonts. This browser has no WebGPU, so they are shown as a grid. Select one to see it on its metrics.";
+    $("#glyphs-lede").textContent = "Every character in each member. This browser has no WebGPU, so they are shown as a grid. Select one to see it on its metrics.";
     setView("grid");
   });
 
-  /* ---------- tester ---------- */
-  const sample = $("#sample");
-  const tstate = { fam: "sans", feats: new Set() };
+  /* ---------- family ----------
+     One panel per member, all kept in the DOM; the toggle hides the others,
+     so text a visitor edits in a panel is still there when they come back to
+     it. The tester has one sample and one set of settings per member. */
+  const family = $("#family"), ffam = $("#ffam");
+  for (const b of ffam.querySelectorAll("button")) if (!D[b.dataset.v]) b.hidden = true;
+  family.querySelectorAll(".edit").forEach((e) => {
+    try { e.contentEditable = "plaintext-only"; } catch { e.contentEditable = "true"; }
+    e.spellcheck = false;
+  });
+  // display lines, ladder rows and paragraphs are single blocks: Enter ends the edit
+  family.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.matches?.(".edit:not(.sample)")) { e.preventDefault(); e.target.blur(); }
+  });
+  // typing in one ladder row retypes the others, so the rows still compare weights
+  family.addEventListener("input", (e) => {
+    const s = e.target.closest?.(".ladder .s");
+    if (!s) return;
+    for (const o of s.closest(".ladder").querySelectorAll(".s")) if (o !== s) o.textContent = s.textContent;
+  });
+
+  const narrow = innerWidth < 600;
+  const tstate = Object.fromEntries(FAMS.map((f) => [f, f === "text"
+    ? { size: narrow ? 18 : 22, weight: 400, lh: 1.5, ls: 0, feats: new Set() }
+    : { size: narrow ? 28 : 44, weight: 400, lh: 1.2, ls: 0, feats: new Set() }]));
+  const TS = $("#ts"), TW = $("#tw"), TL = $("#tl"), TT = $("#tt");
   const EXTRA = { tnum: "Tabular figures", zero: "Slashed zero", frac: "Fractions", case: "Case-sensitive forms", dlig: "Discretionary ligatures", sups: "Superscript", subs: "Subscript" };
+  let fam = FAMS[0];
   function renderFeats() {
-    const list = D[tstate.fam].features.map((f) => ({ tag: f.tag, label: f.label || EXTRA[f.tag] })).filter((f) => f.label);
-    $("#feats").innerHTML = list.map((f) => `<label><input type="checkbox" data-tag="${f.tag}"${tstate.feats.has(f.tag) ? " checked" : ""}><code>${f.tag}</code><span>${f.label}</span></label>`).join("");
+    const on = tstate[fam].feats;
+    const list = D[fam].features.map((f) => ({ tag: f.tag, label: f.label || EXTRA[f.tag] })).filter((f) => f.label);
+    $("#feats").innerHTML = list.map((f) => `<label><input type="checkbox" data-tag="${f.tag}"${on.has(f.tag) ? " checked" : ""}><code>${f.tag}</code><span>${f.label}</span></label>`).join("");
   }
-  function applyTester() {
-    const s = +$("#ts").value, w = +$("#tw").value, l = +$("#tl").value, tr = +$("#tt").value;
-    $("#tso").textContent = `${s} px`; $("#two").textContent = w; $("#tlo").textContent = l.toFixed(2); $("#tto").textContent = `${tr}%`;
-    Object.assign(sample.style, {
-      fontFamily: famFont(tstate.fam), fontSize: `${s}px`, lineHeight: l, letterSpacing: `${tr / 100}em`,
-      fontVariationSettings: `"wght" ${w}`,
-      fontFeatureSettings: [...tstate.feats].map((t) => `"${t}" 1`).join(", ") || "normal",
+  function applyTester(f = fam) {
+    const st = tstate[f];
+    Object.assign($(`#sample-${f}`).style, {
+      fontFamily: famFont(f), fontSize: `${st.size}px`, lineHeight: st.lh, letterSpacing: `${st.ls / 100}em`,
+      fontVariationSettings: `"wght" ${st.weight}`,
+      fontFeatureSettings: [...st.feats].map((t) => `"${t}" 1`).join(", ") || "normal",
     });
+    if (f !== fam) return;
+    $("#tso").textContent = `${st.size} px`; $("#two").textContent = st.weight;
+    $("#tlo").textContent = st.lh.toFixed(2); $("#tto").textContent = `${st.ls}%`;
   }
-  ["#ts", "#tw", "#tl", "#tt"].forEach((id) => $(id).addEventListener("input", applyTester));
-  $("#feats").addEventListener("change", (e) => {
-    const t = e.target.dataset.tag; if (!t) return;
-    e.target.checked ? tstate.feats.add(t) : tstate.feats.delete(t); applyTester();
-  });
-  segWire("#tfam", (v) => {
-    tstate.fam = v; const tw = $("#tw"); tw.max = v === "mono" ? 700 : 900;
-    if (+tw.value > +tw.max) tw.value = tw.max;
-    paintRange(tw);
-    tstate.feats = new Set([...tstate.feats].filter((t) => D[v].features.some((f) => f.tag === t)));
+  // put the selected member's settings back on the shared controls
+  function loadTester() {
+    const st = tstate[fam], [lo, hi] = weights(fam);
+    TW.min = lo; TW.max = hi;
+    TS.value = st.size; TW.value = st.weight; TL.value = st.lh; TT.value = st.ls;
+    [TS, TW, TL, TT].forEach(paintRange);
     renderFeats(); applyTester();
+  }
+  [TS, TW, TL, TT].forEach((r) => r.addEventListener("input", () => {
+    Object.assign(tstate[fam], { size: +TS.value, weight: +TW.value, lh: +TL.value, ls: +TT.value });
+    applyTester();
+  }));
+  $("#feats").addEventListener("change", (e) => {
+    const t = e.target.dataset.tag;
+    if (!t) return;
+    const on = tstate[fam].feats;
+    e.target.checked ? on.add(t) : on.delete(t);
+    applyTester();
   });
-  if (innerWidth < 600) $("#ts").value = 28;
-  renderFeats(); applyTester();
+
+  function setFam(f) {
+    if (!FAMS.includes(f)) return;
+    fam = f;
+    ffam.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === f));
+    family.querySelectorAll(".fam, .sample").forEach((p) => { p.hidden = p.dataset.fam !== f; });
+    $("#tname").textContent = FNAME[f];
+    const [lo, hi] = weights(f);
+    $("#fmeta").textContent = `${lo}–${hi}  ·  ${fmt(D[f].metrics.glyphs)} glyphs`;
+    loadTester();
+  }
+  segWire("#ffam", setFam);
+  FAMS.forEach((f) => applyTester(f));
+  setFam(fam);
+
+  // links to the old sections (#sans, #round, #text, #mono) open that member here
+  function route() {
+    const h = decodeURIComponent(location.hash.slice(1));
+    const target = FAMS.includes(h) ? (setFam(h), family) : h === "try" || h === "family" ? $(`#${h}`) : null;
+    if (!target) return;
+    target.scrollIntoView();
+    // web fonts arriving later can change the height of the page above it;
+    // land again once they are in, unless the visitor has scrolled since
+    const y = scrollY;
+    document.fonts?.ready.then(() => requestAnimationFrame(() => { if (Math.abs(scrollY - y) < 2) target.scrollIntoView(); }));
+  }
+  addEventListener("hashchange", route);
 
   /* ---------- specs ---------- */
-  const Ro = D.round.metrics;
+  const Ro = D.round.metrics, Te = D.text.metrics;
   const rows = [
-    ["Units per em", S.upm, Ro.upm, Mo.upm], ["Ascender", S.ascender, Ro.ascender, Mo.ascender],
-    ["Cap height", S.capHeight, Ro.capHeight, Mo.capHeight], ["x-height", S.xHeight, Ro.xHeight, Mo.xHeight],
-    ["Descender", S.descender, Ro.descender, Mo.descender], ["Advance", "proportional", "proportional", Mo.cell],
-    ["Weight axis", "100–900", "100–900", "100–700"], ["Glyphs", fmt(S.glyphs), fmt(Ro.glyphs), fmt(Mo.glyphs)],
-    ["Characters", fmt(S.characters), fmt(Ro.characters), fmt(Mo.characters)],
-    ["Substitution features", D.sans.features.length, D.round.features.length, D.mono.features.length],
+    ["Units per em", S.upm, Ro.upm, Te.upm, Mo.upm], ["Ascender", S.ascender, Ro.ascender, Te.ascender, Mo.ascender],
+    ["Cap height", S.capHeight, Ro.capHeight, Te.capHeight, Mo.capHeight], ["x-height", S.xHeight, Ro.xHeight, Te.xHeight, Mo.xHeight],
+    ["Descender", S.descender, Ro.descender, Te.descender, Mo.descender], ["Advance", "proportional", "proportional", "proportional", Mo.cell],
+    ["Weight axis", "100–900", "100–900", "100–900", "100–700"], ["Glyphs", fmt(S.glyphs), fmt(Ro.glyphs), fmt(Te.glyphs), fmt(Mo.glyphs)],
+    ["Characters", fmt(S.characters), fmt(Ro.characters), fmt(Te.characters), fmt(Mo.characters)],
+    ["Substitution features", D.sans.features.length, D.round.features.length, D.text.features.length, D.mono.features.length],
   ];
-  $("#metrics").innerHTML = `<thead><tr><th>Metric</th><th>Kerf Sans</th><th>Kerf Round</th><th>Kerf Mono</th></tr></thead><tbody>` +
+  $("#metrics").innerHTML = `<thead><tr><th>Metric</th><th>Kerf Sans</th><th>Kerf Round</th><th>Kerf Text</th><th>Kerf Mono</th></tr></thead><tbody>` +
     rows.map(([k, ...v]) => `<tr><td>${k}</td>${v.map((x) => `<td class="n">${x}</td>`).join("")}</tr>`).join("") + "</tbody>";
 
   /* ---------- go ---------- */
   paintAllRanges();
   drawHero();
+  route();
   let rz;
   addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { drawHero(); renderInspector(); }, 120); });
   document.fonts?.ready.then(() => { drawHero(); renderInspector(); });
