@@ -1,0 +1,388 @@
+World Language Map data notices
+
+Unicode CLDR data (cldr-core, cldr-misc-full and cldr-localenames-full):
+
+UNICODE LICENSE V3
+
+COPYRIGHT AND PERMISSION NOTICE
+
+Copyright © 2004-2026 Unicode, Inc.
+
+NOTICE TO USER: Carefully read the following legal agreement. BY
+DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING DATA FILES, AND/OR
+SOFTWARE, YOU UNEQUIVOCALLY ACCEPT, AND AGREE TO BE BOUND BY, ALL OF THE
+TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE, DO NOT
+DOWNLOAD, INSTALL, COPY, DISTRIBUTE OR USE THE DATA FILES OR SOFTWARE.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of data files and any associated documentation (the "Data Files") or
+software and any associated documentation (the "Software") to deal in the
+Data Files or Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, and/or sell
+copies of the Data Files or Software, and to permit persons to whom the
+Data Files or Software are furnished to do so, provided that either (a)
+this copyright and permission notice appear with all copies of the Data
+Files or Software, or (b) this copyright and permission notice appear in
+associated Documentation.
+
+THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF
+THIRD PARTY RIGHTS.
+
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE
+BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES,
+OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA
+FILES OR SOFTWARE.
+
+Except as contained in this notice, the name of a copyright holder shall
+not be used in advertising or otherwise to promote the sale, use or other
+dealings in these Data Files or Software without prior written
+authorization of the copyright holder.
+
+SPDX-License-Identifier: Unicode-3.0
+
+Natural Earth data (Admin 0 countries 4.1.0 via world-atlas, breakaway and disputed areas 4.1.0 at 1:50m, Admin 1 states and provinces 4.1.0 at 1:10m, and disputed areas 5.1.2 at 1:10m) is in the public domain.
+
+The glyph image atlas.png is rendered from fonts licensed under the SIL Open Font License, Version 1.1: Inter, copyright The Inter Project Authors, and Noto Sans, Noto Sans Arabic, Noto Sans Armenian, Noto Sans Bengali, Noto Sans Canadian Aboriginal, Noto Sans Coptic, Noto Sans Devanagari, Noto Sans Ethiopic, Noto Sans Georgian, Noto Sans Gujarati, Noto Sans Gurmukhi, Noto Sans Hanifi Rohingya, Noto Sans Hebrew, Noto Sans Javanese, Noto Sans JP, Noto Sans Kannada, Noto Sans Khmer, Noto Sans KR, Noto Sans Lao, Noto Sans Malayalam, Noto Sans Mongolian, Noto Sans Myanmar, Noto Sans NKo, Noto Sans Ol Chiki, Noto Sans Oriya, Noto Sans SC, Noto Sans Sinhala, Noto Sans Tamil, Noto Sans TC, Noto Sans Telugu, Noto Sans Thaana, Noto Sans Thai, Noto Sans Tifinagh, Noto Sans Vai, Noto Serif Tibetan, copyright The Noto Project Authors.
+
+The specimen image specimens.png is rendered from fonts licensed under the SIL Open Font License, Version 1.1: Inter, copyright The Inter Project Authors, and Noto Sans Adlam, Noto Sans Arabic, Noto Sans Armenian, Noto Sans Bengali, Noto Sans Brahmi, Noto Sans Canadian Aboriginal, Noto Sans Cherokee, Noto Sans Cuneiform, Noto Sans Devanagari, Noto Sans Egyptian Hieroglyphs, Noto Sans Ethiopic, Noto Sans Georgian, Noto Sans Glagolitic, Noto Sans Hebrew, Noto Sans JP, Noto Sans Kawi, Noto Sans KR, Noto Sans Linear B, Noto Sans Mayan Numerals, Noto Sans Mongolian, Noto Sans NKo, Noto Sans Ogham, Noto Sans Old Persian, Noto Sans Old Turkic, Noto Sans Phoenician, Noto Sans Runic, Noto Sans Tamil, Noto Sans TC, Noto Sans Thaana, Noto Sans Tifinagh, Noto Sans Vai, copyright The Noto Project Authors.
+
+GHS-POP population data: Schiavina M., Freire S., Carioli A., MacManus K. (2023): GHS-POP R2023A - GHS population grid multitemporal (1975-2030). European Commission, Joint Research Centre (JRC). doi:10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE. Licensed under the Creative Commons Attribution 4.0 International License, https://creativecommons.org/licenses/by/4.0/.
+
+The files density-*.u8.gz are derived from its 2025 epoch on the 30 arcsecond WGS84 grid: the people of each cell are summed, divided by the area of the cell on the WGS84 ellipsoid and coded on a logarithmic scale. The same people, summed into 0.05 degree cells, also set the share of the regional languages in units.json and the share of each unit in the cells of blends-*.json; along the boundaries taken from Natural Earth at 1:10m, the people of each 30 arcsecond cell divide a 0.05 degree cell between the units on either side.
+
+Artifact images (artifacts/*.png)
+
+Each image in artifacts/ is a derived work. General Translation cropped the source image listed with it, resampled it and printed it through an 8 by 8 Bayer dither screen. Each derived image is licensed under the license of its source, as listed with it, so the images derived from works under CC BY-SA are licensed under the same CC BY-SA version. The images derived from public domain and CC0 1.0 works carry no added restriction.
+
+artifacts/9ef4ec8e.png
+  Ox scapula with oracle bone inscriptions (Heji 37986), by Gary Lee Todd.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=99142439
+
+artifacts/c0a528ff.png
+  Proto-cuneiform tablet with seal impressions (1988.433.1), by The Metropolitan Museum of Art.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=57854047
+
+artifacts/b90d71b8.png
+  Ebony label of Den (EA 32650), by CaptMondo.
+  License: CC BY 2.5, https://creativecommons.org/licenses/by/2.5/
+  Source: https://commons.wikimedia.org/w/index.php?curid=4591349
+
+artifacts/a2e4daa9.png
+  Sphinx with Proto-Sinaitic inscriptions (Sinai 345), by Romain Butin (1928).
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=144997157
+
+artifacts/21430d87.png
+  Epitaph on the sarcophagus of Ahiram, by Onceinawhile.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=84395163
+
+artifacts/0dfb8324.png
+  Linear B tablet from Knossos, by Jebulon.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=45319694
+
+artifacts/ec603601.png
+  Linear B tablet An 657, Pylos, by Zde.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=84407213
+
+artifacts/f6443c01.png
+  Lumbini pillar inscription (1896 photograph).
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=73373799
+
+artifacts/819854a2.png
+  Las Pinturas, San Bartolo, by Exchanges Photos.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=68985630
+
+artifacts/14d0b974.png
+  Ogham pillar stone at Ballycrovane, by Robert Freeman.
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=54140348
+
+artifacts/a5d33168.png
+  The large Jelling stone, by Roberto Fortuna, Nationalmuseet.
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=25632677
+
+artifacts/8c85b3b9.png
+  Rongorongo tablet D, side a (Échancrée), by Stéphen-Charles Chauvet (1935), online edition by Ann Altman (2004).
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=3520681
+
+artifacts/55b9280b.png
+  The Rosetta Stone (1922 photograph), by Donald Macbeth.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=119273729
+
+artifacts/c9ad772f.png
+  Behistun inscription and relief, by Hara1603.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=75781418
+
+artifacts/a80400fa.png
+  Diamond Sutra of 868, frontispiece and opening text, by Wang Jie (commissioner, 868).
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=6925162
+
+artifacts/5a480cff.png
+  Cherokee Phoenix, first issue (21 February 1828), by Elias Boudinot and Isaac H. Harris.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=58872192
+
+artifacts/5257f326.png
+  Alphabet of the Vei written language (1849), by S. W. Koelle.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=122612872
+
+artifacts/95dcf712.png
+  ADLaM, by Immanuel Giel.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=116682902
+
+artifacts/1c1d9096.png
+  Tomb of Mesrop Mashtots, Oshakan, by Armen Manukov.
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=28435023
+
+artifacts/6ad6867e.png
+  Asomtavruli inscription, Bolnisi Sioni, by Kober.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=4254138
+
+artifacts/f6588d83.png
+  Baška tablet replica, Church of St. Lucy, Jurandvor, by Roberta F..
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=21857486
+
+artifacts/9c0182a4.png
+  Tombstone of Mostich, Veliki Preslav, by Vislupus.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=70686661
+
+artifacts/0b809564.png
+  Bilingual inscription of Dougga (1837 engraving), by Wilhelm Gesenius.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=95354737
+
+artifacts/21671748.png
+  Ezana stone, Ge'ez face, by Sailko.
+  License: CC BY 3.0, https://creativecommons.org/licenses/by/3.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=89754088
+
+artifacts/d54f1e67.png
+  Kultigin Monument of Orkhon Inscriptions, by Vezirtonyukuk.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=45950409
+
+artifacts/df948032.png
+  Laguna Copperplate Inscription, by Gary Lee Todd.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=92364348
+
+artifacts/9c67888e.png
+  Parliament House, Port Moresby (1991), by Brian Ireland.
+  License: CC BY-SA 2.0, https://creativecommons.org/licenses/by-sa/2.0/
+  The print is shared under CC BY-SA 2.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=58073899
+
+artifacts/5bc7c557.png
+  Youth Pledge text, Sumpah Pemuda Museum, by Edogang1.
+  License: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=142329418
+
+artifacts/9a458882.png
+  A Hausa Reading Book (1908), facsimile of a waka, by L. E. O. Charlton (editor).
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=95379458
+
+artifacts/120a21ca.png
+  Wooden slit drums, Bernice P. Bishop Museum, by Wmpearl.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=3590207
+
+artifacts/e2f65a8a.png
+  Photograph of Linguae Vasconum Primitiae (1545), by Urtzi Odriozola.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=179567069
+
+artifacts/8529b26b.png
+  Notebook of Chiri Yukie, picture 7, by Chiri Yukie.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=105618651
+
+artifacts/dcb085ea.png
+  Baltit Fort, about 1890, from E. F. Knight's book of 1893.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=99038309
+
+artifacts/c2aa6b6d.png
+  Water Jar (Olla), 1937.898, by Cleveland Museum of Art.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=76009183
+
+artifacts/38938458.png
+  Silbo Gomero memorial, Mirador de Igualero, by Herbert wie.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=189416487
+
+artifacts/d8a45b39.png
+  Standard Alphabet (1863), click letters, by Karl Richard Lepsius.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=146333659
+
+artifacts/13010e32.png
+  Vocabulario de la lengua aymara (1612), by Ludovico Bertonio.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=73546307
+
+artifacts/902149ae.png
+  Shona headrest (71.1934.137.6), Musée du quai Branly, by Shonagon.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=26147079
+
+artifacts/7514602d.png
+  Fingerspelled alphabet, A to Z, by Isaac Mohlamme.
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=25669739
+
+artifacts/1247d244.png
+  Calligraphed constitution of 1950, Eighth Schedule, by Constituent Assembly.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=40095508
+
+artifacts/ba1640bc.png
+  Letter of Arghun (1289), Archives nationales, by Arghun.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=2631580
+
+artifacts/939bfb00.png
+  Grave of Solomana Kanté, by LamineNoracisse.
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=77198936
+
+artifacts/35963a77.png
+  Sign at the Islamic Centre, Malé, by Balou46.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=67013009
+
+artifacts/fbdf713c.png
+  A Complete Dictionary of Ancient and Modern Hebrew, title page, by Eliezer Ben-Yehuda.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=147393355
+
+artifacts/5159c779.png
+  Mezhdunarodnyi yazyk (1887), title page, by L. L. Zamenhof.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=10380173
+
+artifacts/0ae83360.png
+  Cree syllabary (1841), by James Evans.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=13432069
+
+artifacts/de4b0b43.png
+  Iqaluit stop sign, by Angela.
+  License: CC BY 2.0, https://creativecommons.org/licenses/by/2.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=15063355
+
+artifacts/aa92a545.png
+  Road sign in Arabic and Tifinagh, by Lucyin.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=117401866
+
+artifacts/542d65e3.png
+  Tesoro de la lengua guaraní (1639), by Antonio Ruiz de Montoya.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=128322132
+
+artifacts/dd23ee08.png
+  Hunminjeongeum Haerye (1446), Kansong copy.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=177289969
+
+artifacts/bd537e06.png
+  Three log glasses, NG-MC-1118, by Rijksmuseum.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=85236815
+
+artifacts/6ab969c5.png
+  Wild T3 precision theodolite, by Gampe.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=108342830
+
+artifacts/d756e0fb.png
+  Airy Transit Circle, Greenwich Observations 1852, plate V, by Benjamin Sly.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=180842009
+
+artifacts/9177c310.png
+  GPS receiver on the Greenwich meridian, by J Cohen.
+  License: CC BY 2.5, https://creativecommons.org/licenses/by/2.5/
+  Source: https://commons.wikimedia.org/w/index.php?curid=7773997
+
+artifacts/fdc9ee2a.png
+  Mètre étalon, 36 rue de Vaugirard, by LPLT / Wikimedia Commons.
+  License: CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+  The print is shared under CC BY-SA 3.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=10331682
+
+artifacts/57a703e2.png
+  Buoy 13010 (Soul) at 0° N 0° E, by Graham Curran.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=55545529
+
+artifacts/6845b74a.png
+  Kiritimati from the International Space Station (ISS004-E-6249), by NASA.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=326451
+
+artifacts/e19c2d9a.png
+  Apia clock tower (2016), by Rickard Törnblad.
+  License: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  The print is shared under CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/w/index.php?curid=56246273
+
+artifacts/ef7c06ed.png
+  Yesterday and Tomorrow Islands (2017), by NASA Earth Observatory, Joshua Stevens.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://science.nasa.gov/earth/earth-observatory/yesterday-and-tomorrow-islands-91638/
+
+artifacts/89aede81.png
+  Ducie Island from the International Space Station (ISS002-E-10044), by NASA.
+  License: Public domain, https://creativecommons.org/publicdomain/mark/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=15695299
+
+artifacts/71ad4520.png
+  2008 South Pole marker, by Alan Light.
+  License: CC BY 2.0, https://creativecommons.org/licenses/by/2.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=15725646
+
+artifacts/0ec2f9d2.png
+  W. Wilson's dip needle (about 1900), by Daderot.
+  License: CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://commons.wikimedia.org/w/index.php?curid=35077213

@@ -1,0 +1,540 @@
+<title>Kerf Map</title>
+<style>
+/* Layout: a survey sheet. A plain header, the coverage figures, then one
+   full-width chart with a graticule; the letters are the data. Same tokens
+   as the specimen: red cuts, blue scores. */
+:root {
+  --sheet: #f1f2ef;
+  --panel: #f8f8f6;
+  --ink: #111214;
+  --ink-2: #5d6165;
+  --rule: #d8dad6;
+  --cut: #d92d20;
+  --score: #2457c5;
+  --sans: "Kerf Round", "Kerf Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Kerf Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
+    --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
+  --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
+}
+@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Round"; src: url("fonts/KerfRound.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2") format("woff2"); font-weight: 100 700; font-display: swap; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--sheet); color: var(--ink); font-family: var(--sans); font-size: 1rem; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--cut); }
+:focus-visible { outline: 2px solid var(--score); outline-offset: 2px; }
+.wrap { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
+.num { font-variant-numeric: tabular-nums; }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--sheet) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; gap: 24px; height: 52px; }
+.brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.brand b { font-weight: 650; font-size: 1.125rem; letter-spacing: -0.01em; }
+.brand span { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-2); }
+.top nav { display: flex; gap: 20px; margin-left: auto; font-size: 0.875rem; }
+.top nav a { text-decoration: none; color: var(--ink-2); }
+.top nav a[aria-current="page"], .top nav a:hover { color: var(--ink); }
+.top .gh { font-size: 0.875rem; text-decoration: none; border: 1px solid var(--rule); border-radius: 6px; padding: 5px 10px; }
+@media (max-width: 640px) { .top nav { gap: 14px; } .top .gh { display: none; } }
+
+.intro { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 24px 64px; padding-block: 40px 28px; align-items: end; }
+.intro h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.02; font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.intro p { margin: 0; color: var(--ink-2); max-width: 58ch; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+.stat { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--rule); min-width: 0; }
+.stat b { display: block; font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 0.8125rem; color: var(--ink-2); }
+@media (max-width: 860px) { .intro { grid-template-columns: 1fr; } }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding-block: 14px; font-size: 0.875rem; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button { background: none; border: 0; padding: 6px 12px; cursor: pointer; font: inherit; font-size: 0.875rem; color: var(--ink-2); }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+.seg button:hover:not([aria-pressed="true"]) { color: var(--ink); }
+label.check { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+input[type="checkbox"] { -webkit-appearance: none; appearance: none; flex: none; width: 15px; height: 15px; margin: 0; border: 1.5px solid var(--ink-2); border-radius: 3px; display: inline-grid; place-content: center; background: var(--panel); cursor: pointer; }
+input[type="checkbox"]::before { content: ""; width: 7px; height: 7px; border-radius: 1px; background: var(--cut); transform: scale(0); transition: transform 0.12s ease; }
+input[type="checkbox"]:checked { border-color: var(--ink); }
+input[type="checkbox"]:checked::before { transform: scale(1); }
+.btn { font: inherit; font-size: 0.875rem; color: inherit; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 11px; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.readout { margin-left: auto; font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-2); white-space: nowrap; }
+
+.chart { position: relative; height: clamp(440px, 74vh, 860px); border-block: 1px solid var(--rule); background: var(--sheet); overflow: hidden; user-select: none; -webkit-user-select: none; }
+.chart canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.chart canvas:active { cursor: grabbing; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-2); }
+.card { position: absolute; z-index: 2; width: 300px; max-width: calc(100% - 24px); pointer-events: none; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; box-shadow: 0 20px 50px -24px rgb(0 0 0 / 0.35); font-size: 0.875rem; }
+.card .coord { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+.card ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.card li { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: baseline; }
+.card .own { font-size: 1.25rem; line-height: 1.2; overflow-wrap: anywhere; }
+.card .own.none { color: var(--ink-2); font-family: ui-sans-serif, system-ui, sans-serif; }
+.card .share { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+.card .meta { grid-column: 1 / -1; font-size: 0.75rem; color: var(--ink-2); }
+.card .meta i { font-style: normal; color: var(--cut); }
+.card .dens { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; padding-block: 16px; font-size: 0.8125rem; color: var(--ink-2); }
+.legend span { display: inline-flex; gap: 8px; align-items: center; }
+.legend b { font-weight: 500; font-size: 1.125rem; line-height: 1; color: var(--tone); }
+.ramp { display: inline-flex; gap: 10px; align-items: baseline; }
+.ramp em { font-style: normal; font-size: 1.25rem; color: var(--ink); line-height: 1; }
+.notes { border-top: 1px solid var(--rule); padding-block: 28px 56px; font-size: 0.8125rem; color: var(--ink-2); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 64px; }
+.notes p { margin: 0; max-width: 64ch; }
+@media (max-width: 860px) { .notes { grid-template-columns: 1fr; } .readout { margin-left: 0; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><b>Kerf</b><span>v0.1</span></a>
+    <nav aria-label="Pages">
+      <a href="/">Specimen</a>
+      <a href="/map" aria-current="page">Map</a>
+    </nav>
+    <a class="gh" href="https://github.com/Kevin-Liu-01/Kerf" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap intro">
+    <div>
+      <h1>Where Kerf writes</h1>
+    </div>
+    <p>Every land cell is a letter from the language spoken there, set in Kerf. Where a script is not covered yet, the cell shows a + instead, so the map is also the font's coverage. Heavier letters mean more people per square kilometre.</p>
+  </div>
+  <div class="wrap">
+    <div class="stats" id="stats">
+      <div class="stat"><b id="st-people">–</b><span>of people live where the main language is one Kerf writes</span></div>
+      <div class="stat"><b id="st-langs">–</b><span>of the map's languages written in full</span></div>
+      <div class="stat"><b id="st-land">–</b><span>of mapped land</span></div>
+    </div>
+    <div class="bar">
+      <div class="seg" role="group" aria-label="Family" id="fam">
+        <button type="button" data-v="round" aria-pressed="true">Round</button>
+        <button type="button" data-v="sans" aria-pressed="false">Sans</button>
+        <button type="button" data-v="mono" aria-pressed="false">Mono</button>
+      </div>
+      <div class="seg" role="group" aria-label="Region" id="region">
+        <button type="button" data-v="europe" aria-pressed="true">Europe</button>
+        <button type="button" data-v="americas" aria-pressed="false">Americas</button>
+        <button type="button" data-v="africa" aria-pressed="false">Africa</button>
+        <button type="button" data-v="asia" aria-pressed="false">Asia</button>
+        <button type="button" data-v="world" aria-pressed="false">World</button>
+      </div>
+      <label class="check"><input type="checkbox" id="weigh" checked> Weight from density</label>
+      <span class="btns"><button class="btn" type="button" id="zout" aria-label="Zoom out">−</button> <button class="btn" type="button" id="zin" aria-label="Zoom in">+</button></span>
+      <span class="readout num" id="readout"></span>
+    </div>
+  </div>
+  <div class="chart" id="chart">
+    <canvas id="map" tabindex="0" aria-label="World map drawn in letters. Drag to move, scroll or use plus and minus to zoom, arrow keys to pan."></canvas>
+    <div class="loading" id="loading">Loading the map</div>
+    <div class="card" id="card" hidden></div>
+  </div>
+  <div class="wrap">
+    <div class="legend" id="legend">
+      <span style="--tone: var(--ink)"><b>a</b> Latin</span>
+      <span style="--tone: var(--score)"><b>д</b> Cyrillic</span>
+      <span style="--tone: var(--cut)"><b>λ</b> Greek</span>
+      <span style="--tone: var(--ink-2)"><b>+</b> Not covered yet</span>
+      <span class="ramp" aria-label="Weight scale">1 per km² <em style="font-weight:150">a</em><em style="font-weight:400">a</em><em style="font-weight:650">a</em><em style="font-weight:900">a</em> 1,000+</span>
+    </div>
+  </div>
+  <div class="wrap notes">
+    <p>Each cell is assigned to its country or territory, and a cell where several languages are spoken picks one by an ordered dither in proportion to their shares, so a region reads as its mix. The letter in a cell is the language's own, chosen at random from the letters Kerf has, and the same cell always draws the same letter.</p>
+    <p id="sources">Map data from General Translation's world language map: languages, letters and names from Unicode CLDR, borders from Natural Earth, and population from GHS-POP (European Commission, CC BY 4.0). <a href="map/LICENSE.txt">Data notices</a>.</p>
+  </div>
+</main>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const DATA_URL = "map/map.json";
+  const FAMILY = { round: '"Kerf Round"', sans: '"Kerf Sans"', mono: '"Kerf Mono"' };
+  const MAX_WEIGHT = { round: 900, sans: 900, mono: 700 };
+  const TONE = { Latn: "--ink", Cyrl: "--score", Grek: "--cut" };
+  const SCRIPT_NAMES = {
+    Latn: "Latin", Cyrl: "Cyrillic", Grek: "Greek", Arab: "Arabic", Hans: "Han", Hant: "Han", Hani: "Han", Jpan: "Japanese",
+    Kore: "Hangul", Hang: "Hangul", Deva: "Devanagari", Beng: "Bengali", Taml: "Tamil", Telu: "Telugu", Knda: "Kannada",
+    Mlym: "Malayalam", Gujr: "Gujarati", Guru: "Gurmukhi", Orya: "Odia", Sinh: "Sinhala", Thai: "Thai", Laoo: "Lao",
+    Khmr: "Khmer", Mymr: "Myanmar", Tibt: "Tibetan", Mong: "Mongolian", Ethi: "Ethiopic", Hebr: "Hebrew", Geor: "Georgian",
+    Armn: "Armenian", Thaa: "Thaana", Tfng: "Tifinagh", Cans: "Canadian syllabics", Cher: "Cherokee", Vaii: "Vai", Nkoo: "N'Ko",
+  };
+  const REGIONS = {
+    europe: { lon: 15, lat: 50, deg: 64 }, americas: { lon: -82, lat: 12, deg: 120 }, africa: { lon: 18, lat: 3, deg: 80 },
+    asia: { lon: 92, lat: 32, deg: 100 }, world: { lon: 10, lat: 12, deg: 360 },
+  };
+  const BAYER = [[0,32,8,40,2,34,10,42],[48,16,56,24,50,18,58,26],[12,44,4,36,14,46,6,38],[60,28,52,20,62,30,54,22],
+    [3,35,11,43,1,33,9,41],[51,19,59,27,49,17,57,25],[15,47,7,39,13,45,5,37],[63,31,55,23,61,29,53,21]];
+
+  /* ---------- small helpers ---------- */
+  function hash32(n, salt = 0) {
+    let x = (n ^ Math.imul(salt, 0x9e3779b9)) >>> 0;
+    x ^= x >>> 16; x = Math.imul(x, 0x7feb352d) >>> 0;
+    x ^= x >>> 15; x = Math.imul(x, 0x846ca68b) >>> 0;
+    x ^= x >>> 16; return x >>> 0;
+  }
+  const densityPerKm2 = (code) => (code === 0 ? 0 : 10 ** (-3 + (code - 1) / 32));
+  // 0 at 1 person per km², 1 at 1,000 and above, eased like GT's glyph sizes
+  const densityPlace = (code) => {
+    const d = densityPerKm2(code);
+    return d > 1 ? Math.min(1, Math.log10(d) / 3) ** 1.3 : 0;
+  };
+  const fmt = (n) => n.toLocaleString("en-US");
+  async function bytes(url) {
+    const buf = new Uint8Array(await (await fetch(url)).arrayBuffer());
+    if (buf[0] !== 0x1f || buf[1] !== 0x8b) return buf;  // a server may have unzipped it already
+    const stream = new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  /* ---------- state ---------- */
+  const canvas = $("#map"), chart = $("#chart"), card = $("#card");
+  const ctx = canvas.getContext("2d");
+  const state = { fam: "round", weigh: true, lon: 14, lat: 51, scale: 20 };
+  let D = null;
+  const levels = {};  // res -> { res, cols, rows, cells, dens, blends }
+  const pools = new Map();  // "res:id" -> { keys, tags, cuts }
+  let covered = null;  // family -> { keys: Set, letters: Map(key -> [ch]) }
+  let colors = {};
+  let dirty = true, hover = null;
+
+  function readColors() {
+    colors = { sheet: css("--sheet"), ink: css("--ink"), ink2: css("--ink-2"), rule: css("--rule"), cut: css("--cut"), score: css("--score") };
+    dotCache.clear(); dirty = true;
+  }
+  const toneOf = (script) => (TONE[script] === "--score" ? colors.score : TONE[script] === "--cut" ? colors.cut : colors.ink);
+
+  function coverage(fam) {
+    covered ??= {};
+    if (covered[fam]) return covered[fam];
+    const cps = new Set([...D.charsets[fam]].map((c) => c.codePointAt(0)));
+    const keys = new Set(D.coverage[fam]);
+    const letters = new Map();
+    for (const key of keys) {
+      letters.set(key, D.sets[key].glyphs.split(" ").filter((ch) => [...ch].every((c) => cps.has(c.codePointAt(0)))));
+    }
+    return (covered[fam] = { keys, letters });
+  }
+
+  function poolOf(level, id) {
+    const k = `${level.res}:${id}`;
+    let p = pools.get(k);
+    if (p) return p;
+    let rows = D.units[id];
+    if (!rows && level.blends.has(id)) {
+      const acc = new Map();
+      for (const [unit, share] of level.blends.get(id)) {
+        for (const [key, permille, tag] of D.units[unit] ?? []) {
+          const kk = `${key} ${tag}`;
+          const row = acc.get(kk) ?? [key, 0, tag];
+          row[1] += (permille * share) / 1000;
+          acc.set(kk, row);
+        }
+      }
+      rows = [...acc.values()].sort((a, b) => b[1] - a[1]);
+    }
+    rows ??= [];
+    let sum = 0;
+    p = { keys: rows.map((r) => r[0]), tags: rows.map((r) => r[2]), shares: rows.map((r) => r[1]), cuts: rows.map((r) => (sum += r[1]) / 1000) };
+    pools.set(k, p);
+    return p;
+  }
+
+  // The language a cell draws: an ordered dither over the cell's shares, phased per 8 x 8 tile.
+  function pick(level, col, row, p) {
+    if (p.keys.length === 1) return 0;
+    const phase = hash32((row >> 3) * (level.cols >> 3) + (col >> 3), 7) / 2 ** 32;
+    let t = (BAYER[row & 7][col & 7] + 0.5) / 64 + phase;
+    t -= Math.floor(t);
+    for (let i = 0; i < p.cuts.length; i++) if (p.cuts[i] > t) return i;
+    return p.cuts.length - 1;
+  }
+
+  /* ---------- view ---------- */
+  const W = () => canvas.clientWidth, H = () => canvas.clientHeight;
+  const minScale = () => Math.max(W() / 360, H() / (D.crop.north - D.crop.south));
+  const X = (lon) => (lon - state.lon) * state.scale + W() / 2;
+  const Y = (lat) => (state.lat - lat) * state.scale + H() / 2;
+  const lonAt = (x) => state.lon + (x - W() / 2) / state.scale;
+  const latAt = (y) => state.lat - (y - H() / 2) / state.scale;
+  function clampView() {
+    state.scale = Math.min(140, Math.max(minScale(), state.scale));
+    const halfW = W() / 2 / state.scale, halfH = H() / 2 / state.scale;
+    state.lon = Math.min(180 - halfW, Math.max(-180 + halfW, state.lon));
+    state.lat = Math.min(D.crop.north - halfH, Math.max(D.crop.south + halfH, state.lat));
+  }
+  function goTo(region) {
+    const r = REGIONS[region];
+    state.lon = r.lon; state.lat = r.lat; state.scale = W() / r.deg;
+    clampView(); dirty = true;
+  }
+
+  /* ---------- drawing ---------- */
+  const dotCache = new Map();
+  function dotImage(level) {
+    const key = `${state.fam}:${level.res}:${state.weigh}`;
+    if (dotCache.has(key)) return dotCache.get(key);
+    const { cols, rows } = level;
+    const off = document.createElement("canvas");
+    off.width = cols; off.height = rows;
+    const g = off.getContext("2d");
+    const img = g.createImageData(cols, rows);
+    const cov = coverage(state.fam);
+    const rgb = (c) => { g.fillStyle = c; const h = g.fillStyle; return [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); };
+    const tones = { Latn: rgb(colors.ink), Cyrl: rgb(colors.score), Grek: rgb(colors.cut), none: rgb(colors.ink2) };
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const i = row * cols + col, id = level.cells[i];
+        if (!id) continue;
+        const p = poolOf(level, id);
+        if (!p.keys.length) continue;
+        const key = p.keys[pick(level, col, row, p)];
+        const ok = cov.keys.has(key);
+        const t = ok ? tones[D.sets[key].script] ?? tones.Latn : tones.none;
+        // covered land reads clearly darker than land Kerf cannot write yet
+        const a = ok ? (state.weigh ? 0.55 + 0.45 * densityPlace(level.dens[i]) : 0.85) : 0.16;
+        img.data.set([t[0], t[1], t[2], Math.round(a * 255)], i * 4);
+      }
+    }
+    g.putImageData(img, 0, 0);
+    dotCache.set(key, off);
+    return off;
+  }
+
+  function graticule() {
+    // the finest step that keeps lines at least 80 px apart
+    const step = [0.5, 1, 2, 5, 10, 15, 30].find((s) => s * state.scale >= 80) ?? 30;
+    ctx.save();
+    ctx.strokeStyle = colors.rule; ctx.lineWidth = 1;
+    ctx.fillStyle = colors.ink2; ctx.font = `400 11px ${FAMILY.mono}`;
+    ctx.beginPath();
+    const lon0 = Math.ceil(lonAt(0) / step) * step, lat0 = Math.floor(latAt(0) / step) * step;
+    for (let lon = lon0; lon <= lonAt(W()); lon += step) { const x = Math.round(X(lon)) + 0.5; ctx.moveTo(x, 0); ctx.lineTo(x, H()); }
+    for (let lat = lat0; lat >= latAt(H()); lat -= step) { const y = Math.round(Y(lat)) + 0.5; ctx.moveTo(0, y); ctx.lineTo(W(), y); }
+    ctx.stroke();
+    const label = (v, pos, neg) => `${+Math.abs(v).toFixed(1)}°${v === 0 ? "" : v > 0 ? pos : neg}`;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    for (let lon = lon0; lon <= lonAt(W()); lon += step) ctx.fillText(label(lon, "E", "W"), X(lon) + 4, 6);
+    ctx.textBaseline = "bottom";
+    for (let lat = lat0; lat >= latAt(H()); lat -= step) ctx.fillText(label(lat, "N", "S"), 6, Y(lat) - 3);
+    ctx.restore();
+  }
+
+  function levelFor() {
+    // the finest grid whose cells are at least 11 px; letters need room
+    for (const res of [0.25, 0.5, 1]) if (res * state.scale >= 11 && levels[res]) return { level: levels[res], glyphs: true };
+    return { level: levels[0.25] ?? levels[0.5] ?? levels[1], glyphs: false };
+  }
+
+  function draw() {
+    dirty = false;
+    const w = W(), h = H(), dpr = Math.min(2, devicePixelRatio || 1);
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = colors.sheet; ctx.fillRect(0, 0, w, h);
+    graticule();
+    const { level, glyphs } = levelFor();
+    const res = level.res;
+    if (!glyphs) {
+      ctx.imageSmoothingEnabled = state.scale * res < 2.5;
+      ctx.drawImage(dotImage(level), X(-180), Y(90), 360 * state.scale, 180 * state.scale);
+    } else {
+      const cov = coverage(state.fam), maxW = MAX_WEIGHT[state.fam];
+      const cell = res * state.scale, size = cell * 0.8;
+      const c0 = Math.max(0, Math.floor((lonAt(0) + 180) / res)), c1 = Math.min(level.cols - 1, Math.floor((lonAt(w) + 180) / res));
+      const r0 = Math.max(0, Math.floor((90 - latAt(0)) / res)), r1 = Math.min(level.rows - 1, Math.floor((90 - latAt(h)) / res));
+      const buckets = new Map();
+      const put = (k, x, y, ch) => { let b = buckets.get(k); if (!b) buckets.set(k, (b = [])); b.push(x, y, ch); };
+      for (let row = r0; row <= r1; row++) {
+        const y = Y(90 - (row + 0.5) * res);
+        for (let col = c0; col <= c1; col++) {
+          const i = row * level.cols + col, id = level.cells[i];
+          if (!id) continue;
+          const p = poolOf(level, id);
+          if (!p.keys.length) continue;
+          const key = p.keys[pick(level, col, row, p)];
+          const x = X(-180 + (col + 0.5) * res);
+          const letters = cov.keys.has(key) ? cov.letters.get(key) : null;
+          if (!letters?.length) { put("none", x, y, "+"); continue; }
+          const weight = state.weigh ? 100 + Math.round((densityPlace(level.dens[i]) * (maxW - 100)) / 100) * 100 : 400;
+          put(`${weight}|${D.sets[key].script}`, x, y, letters[hash32(i, 11) % letters.length]);
+        }
+      }
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      for (const [k, b] of buckets) {
+        if (k === "none") { ctx.font = `300 ${size * 0.7}px ${FAMILY.mono}`; ctx.fillStyle = colors.ink2; ctx.globalAlpha = 0.4; }
+        else { const [wt, script] = k.split("|"); ctx.font = `${wt} ${size}px ${FAMILY[state.fam]}`; ctx.fillStyle = toneOf(script); ctx.globalAlpha = 1; }
+        for (let j = 0; j < b.length; j += 3) ctx.fillText(b[j + 2], b[j], b[j + 1]);
+      }
+      ctx.globalAlpha = 1;
+    }
+    if (hover) {
+      const cell = hover.res * state.scale;
+      const x = X(-180 + hover.col * hover.res), y = Y(90 - hover.row * hover.res);
+      ctx.strokeStyle = colors.cut; ctx.lineWidth = 1.5;
+      ctx.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, Math.max(4, cell), Math.max(4, cell));
+    }
+    const c = { lon: state.lon, lat: state.lat };
+    $("#readout").textContent = `${coord(c.lat, c.lon)}  ${res}° cells`;
+  }
+
+  const coord = (lat, lon) => `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "N" : "S"}  ${Math.abs(lon).toFixed(2)}° ${lon >= 0 ? "E" : "W"}`;
+
+  /* ---------- hover card ---------- */
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  function showCard(ev) {
+    const r = canvas.getBoundingClientRect();
+    const x = ev.clientX - r.left, y = ev.clientY - r.top;
+    const lon = lonAt(x), lat = latAt(y);
+    const { level } = levelFor();
+    const res = level.res;
+    const col = Math.floor((lon + 180) / res), row = Math.floor((90 - lat) / res);
+    if (col < 0 || row < 0 || col >= level.cols || row >= level.rows) return hideCard();
+    const i = row * level.cols + col, id = level.cells[i];
+    const p = id ? poolOf(level, id) : null;
+    const prev = hover;
+    hover = p?.keys.length ? { res, col, row } : null;
+    if (!hover) { card.hidden = true; if (prev) dirty = true; return; }
+    if (!prev || prev.col !== col || prev.row !== row || prev.res !== res) dirty = true;
+    const cov = coverage(state.fam);
+    const rows = p.tags.slice(0, 3).map((tag, k) => {
+      const lang = D.languages[tag] ?? { en: tag };
+      const key = p.keys[k], script = D.sets[key]?.script;
+      const ok = cov.keys.has(key);
+      const own = lang.own ?? lang.en;
+      const style = ok ? ` style="font-family:${FAMILY[state.fam]}"` : "";
+      return `<li><span class="own${ok ? "" : " none"}"${style}>${esc(own)}</span><span class="share">${Math.round(p.shares[k] / 10)}%</span>` +
+        `<span class="meta">${esc(lang.en)}, ${SCRIPT_NAMES[script] ?? script}${ok ? "" : " <i>not covered yet</i>"}</span></li>`;
+    }).join("");
+    const d = densityPerKm2(level.dens[i]);
+    card.innerHTML = `<div class="coord">${coord(lat, lon)}</div><ul>${rows}</ul>` +
+      `<div class="dens">${d >= 10 ? fmt(Math.round(d)) : d.toFixed(1)} people per km²</div>`;
+    card.hidden = false;
+    const cw = card.offsetWidth, chh = card.offsetHeight;
+    card.style.left = `${x + 18 + cw > r.width ? x - cw - 18 : x + 18}px`;
+    card.style.top = `${Math.min(r.height - chh - 8, Math.max(8, y - chh / 2))}px`;
+  }
+  function hideCard() { card.hidden = true; if (hover) { hover = null; dirty = true; } }
+
+  /* ---------- input ---------- */
+  const pointers = new Map();
+  let pinch = null;
+  canvas.addEventListener("pointerdown", (e) => {
+    canvas.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2) {
+      const [a, b] = [...pointers.values()];
+      pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), scale: state.scale };
+    }
+    hideCard();
+  });
+  canvas.addEventListener("pointermove", (e) => {
+    const last = pointers.get(e.pointerId);
+    if (!last) { if (e.pointerType === "mouse") showCard(e); return; }
+    if (pointers.size === 2 && pinch) {
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      const [a, b] = [...pointers.values()];
+      state.scale = pinch.scale * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d;
+    } else {
+      state.lon -= (e.clientX - last.x) / state.scale;
+      state.lat += (e.clientY - last.y) / state.scale;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    }
+    clampView(); markRegion(null); dirty = true;
+  });
+  const up = (e) => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch = null; };
+  canvas.addEventListener("pointerup", (e) => { const tap = pointers.size === 1; up(e); if (tap && e.pointerType !== "mouse") showCard(e); });
+  canvas.addEventListener("pointercancel", up);
+  canvas.addEventListener("pointerleave", hideCard);
+  function zoomAt(factor, x = W() / 2, y = H() / 2) {
+    const lon = lonAt(x), lat = latAt(y);
+    state.scale *= factor;
+    clampView();
+    state.lon += lon - lonAt(x); state.lat += lat - latAt(y);
+    clampView(); markRegion(null); dirty = true;
+  }
+  canvas.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const r = canvas.getBoundingClientRect();
+    zoomAt(Math.exp(-e.deltaY * (e.deltaMode === 1 ? 0.05 : 0.0018)), e.clientX - r.left, e.clientY - r.top);
+    hideCard();
+  }, { passive: false });
+  canvas.addEventListener("dblclick", (e) => { const r = canvas.getBoundingClientRect(); zoomAt(2, e.clientX - r.left, e.clientY - r.top); });
+  canvas.addEventListener("keydown", (e) => {
+    const k = { ArrowLeft: () => (state.lon -= 60 / state.scale), ArrowRight: () => (state.lon += 60 / state.scale),
+      ArrowUp: () => (state.lat += 60 / state.scale), ArrowDown: () => (state.lat -= 60 / state.scale),
+      "+": () => zoomAt(1.5), "=": () => zoomAt(1.5), "-": () => zoomAt(1 / 1.5) }[e.key];
+    if (!k) return;
+    e.preventDefault(); k(); clampView(); markRegion(null); dirty = true;
+  });
+  $("#zin").addEventListener("click", () => zoomAt(1.5));
+  $("#zout").addEventListener("click", () => zoomAt(1 / 1.5));
+  function segWire(id, fn) {
+    $(id).addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return;
+      $(id).querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+      fn(b.dataset.v);
+    });
+  }
+  function markRegion(v) { $("#region").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === v)); }
+  segWire("#region", goTo);
+  segWire("#fam", (v) => { state.fam = v; showStats(); dirty = true; });
+  $("#weigh").addEventListener("change", (e) => { state.weigh = e.target.checked; dirty = true; });
+
+  function showStats() {
+    const s = D.stats[state.fam];
+    $("#st-people").textContent = `${s.people}%`;
+    $("#st-langs").textContent = `${s.languages} of ${s.of}`;
+    $("#st-land").textContent = `${s.land}%`;
+  }
+
+  /* ---------- boot ---------- */
+  async function loadLevel(res) {
+    const v = `?v=${D.version}`;
+    const [g, d, b] = await Promise.all([bytes(`map/grid-${res}.u16.gz${v}`), bytes(`map/density-${res}.u8.gz${v}`), fetch(`map/blends-${res}.json${v}`).then((r) => r.json())]);
+    const cells = new Uint16Array(g.length >> 1);
+    for (let i = 0; i < cells.length; i++) cells[i] = g[2 * i] | (g[2 * i + 1] << 8);
+    const blends = new Map();
+    for (const [id, ...rest] of b) {
+      const of = [];
+      for (let k = 0; k < rest.length; k += 2) of.push([rest[k], rest[k + 1]]);
+      blends.set(id, of);
+    }
+    levels[res] = { res: +res, cols: 360 / res, rows: 180 / res, cells, dens: d, blends };
+    dirty = true;
+  }
+  async function boot() {
+    readColors();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readColors);
+    new MutationObserver(readColors).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    D = await (await fetch(DATA_URL)).json();
+    showStats();
+    await Promise.all([loadLevel("1"), document.fonts.load(`400 20px ${FAMILY.round}`), document.fonts.load(`400 12px ${FAMILY.mono}`)]);
+    $("#loading").hidden = true;
+    goTo("europe");
+    loadLevel("0.5"); loadLevel("0.25");
+    document.fonts.ready.then(() => (dirty = true));
+    new ResizeObserver(() => { clampView(); dirty = true; }).observe(canvas);
+    const loop = () => { if (dirty) draw(); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  }
+  boot().catch((err) => { $("#loading").textContent = `The map data did not load: ${err.message}`; });
+})();
+</script>
