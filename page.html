@@ -372,13 +372,13 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     <div class="wrap">
       <div class="plate-head">
         <h2>Kerf Round</h2>
-        <p>The universal member, kept close to Inter. It keeps Inter's proportions, spacing and weights, and adds a light squaring of the curves, level cuts on c, e, s and a, Kerf's figures, the compact f, a G with a spur and thicker joins in bold. Nine weights from Thin to Black.</p>
+        <p>The geometric member. It keeps Inter's proportions, spacing and weights, squares its bowls a little less than Kerf Sans, and rounds every outer vertex: stem ends, terminals and apexes. Kerf's figures, the compact f, a G with a spur and level cuts on c, e, s, a and g. Nine weights from Thin to Black.</p>
       </div>
       <div class="display-line" style="font-weight:600">Good type, plainly spoken.</div>
       <div class="ladder" id="ladder-round"></div>
       <div class="reading">
         <div><div class="cap">15 px / 400</div><p style="font-size:15px;line-height:1.55">Kerf Round is built for the places where a typeface should not be noticed first: dashboards, settings pages, long documents and the labels on buttons. It keeps Inter's coverage and features, and its weights line up with Kerf Sans.</p></div>
-        <div><div class="cap">18 px / 400</div><p style="font-size:18px;line-height:1.5">Its curves sit at superellipse 2.21, against 2.15 for Inter and 2.68 for Kerf Sans, so it reads as Inter with Kerf's figures.</p></div>
+        <div><div class="cap">18 px / 400</div><p style="font-size:18px;line-height:1.5">Its bowls sit between Inter and Kerf Sans, and its corners are rounded at a fifth of a stem, so it reads as geometric and soft at once.</p></div>
         <div><div class="cap">24 px / 600</div><p style="font-size:24px;line-height:1.3;font-weight:600">Invite team, Export CSV, Upgrade plan.</p></div>
       </div>
     </div>
@@ -540,7 +540,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   // 0 is Kerf Mono, 1 Kerf Sans, 2 Kerf Round; each half blends Sans with one neighbour
   function morph(ch, v) {
     const o = D.outlines[ch];
-    const [A, B, t] = v <= 1 ? [o.mono, o.kerf, v] : [o.kerf, o.round, v - 1];
+    const [A, B, t] = v <= 1 ? [o.mono, o.hero, v] : [o.hero, o.round, v - 1];
     return {
       adv: lerp(A.adv, B.adv, t),
       contours: A.contours.map((c, i) => c.map((p, j) => {
