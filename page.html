@@ -630,7 +630,8 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
         for (const s of segments(c)) {
           if (s.offs.length !== 2) continue;
           const k = corner(s);
-          if (k) { sum += k.f; count++; }
+          // the bowls' curves only; Kerf Round's small corner arcs would skew it
+          if (k && Math.hypot(s.p3[0] - s.p0[0], s.p3[1] - s.p0[1]) > 100) { sum += k.f; count++; }
           if (!construct.checked) continue;
           if (k) {
             el("polyline", { points: `${ox + s.p0[0]},${Y(s.p0[1])} ${ox + k.k[0]},${Y(k.k[1])} ${ox + s.p3[0]},${Y(s.p3[1])}`, fill: "none", stroke: "var(--ink-2)", "stroke-width": px, "stroke-dasharray": `${2 * px} ${3 * px}`, opacity: 0.7 }, g);
