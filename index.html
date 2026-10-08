@@ -36,9 +36,9 @@
   --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
 }
 
-@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2?v=de894c98e0") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2?v=ba0ffc4689") format("woff2"); font-weight: 100 700; font-display: swap; }
-@font-face { font-family: "Kerf Round"; src: url("fonts/KerfRound.woff2?v=baa87ebcc9") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2?v=6851f0af29") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2?v=3c2247414a") format("woff2"); font-weight: 100 700; font-display: swap; }
+@font-face { font-family: "Kerf Round"; src: url("fonts/KerfRound.woff2?v=3acdcf77f3") format("woff2"); font-weight: 100 900; font-display: swap; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -77,7 +77,10 @@ p { margin: 0; max-width: 62ch; }
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 14px 16px; border-top: 1px solid var(--rule); font-size: 0.875rem; position: relative; background: var(--panel); }
 .controls label { display: flex; align-items: center; gap: 10px; }
 .morph { flex: 1 1 320px; display: flex; align-items: center; gap: 12px; }
-.morph input { flex: 1; }
+.morph .track { flex: 1; position: relative; display: flex; padding-top: 16px; min-width: 0; }
+.morph .track input { flex: 1; }
+.morph .mid { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2); white-space: nowrap; pointer-events: none; }
+.morph .mid::after { content: ""; position: absolute; left: 50%; top: 15px; width: 1px; height: 8px; background: var(--ink-2); }
 .morph .end { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-2); }
 .readout { font-family: var(--mono); font-size: var(--step--1); white-space: nowrap; }
 .readout b { font-weight: 600; color: var(--cut); }
@@ -302,8 +305,11 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
       <div class="controls">
         <div class="morph">
           <span class="end">Kerf Mono</span>
-          <input id="morph" type="range" min="0" max="1" step="0.001" value="1" aria-label="Morph the word from Kerf Mono to Kerf Sans">
-          <span class="end">Kerf Sans</span>
+          <span class="track">
+            <input id="morph" type="range" min="0" max="2" step="0.001" value="1" aria-label="Morph the word: Kerf Mono at the left, Kerf Sans in the middle, Kerf Round at the right" aria-valuetext="Kerf Sans">
+            <span class="mid" aria-hidden="true">Kerf Sans</span>
+          </span>
+          <span class="end">Kerf Round</span>
         </div>
         <span class="readout num" id="readout"></span>
         <label><input id="construct" type="checkbox" checked> Points</label>
@@ -517,7 +523,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   </div>
 </footer>
 
-<script src="data.js?v=82fe5121fa"></script>
+<script src="data.js?v=5faf4b0d34"></script>
 <script>
 (() => {
   const D = window.KERF;
@@ -538,8 +544,10 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   const lerp = (a, b, t) => a + (b - a) * t;
 
   /* ---------- outline helpers ---------- */
-  function morph(ch, t) {
-    const A = D.outlines[ch].mono, B = D.outlines[ch].kerf;
+  // 0 is Kerf Mono, 1 Kerf Sans, 2 Kerf Round; each half blends Sans with one neighbour
+  function morph(ch, v) {
+    const o = D.outlines[ch];
+    const [A, B, t] = v <= 1 ? [o.mono, o.kerf, v] : [o.kerf, o.round, v - 1];
     return {
       adv: lerp(A.adv, B.adv, t),
       contours: A.contours.map((c, i) => c.map((p, j) => {
@@ -650,18 +658,25 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     const total = glyphs.reduce((s, g) => s + g.adv, 0);
     readout.innerHTML = `width <b>${fmt(Math.round(total))}</b> &nbsp; f <b>${(sum / count).toFixed(3)}</b>`;
   }
-  morphIn.addEventListener("input", drawHero);
+  morphIn.addEventListener("input", () => {
+    const v = +morphIn.value;
+    morphIn.setAttribute("aria-valuetext", v < 0.5 ? "Kerf Mono" : v > 1.5 ? "Kerf Round" : "Kerf Sans");
+    drawHero();
+  });
   construct.addEventListener("change", drawHero);
   let playing = 0;
   $("#play").addEventListener("click", () => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) { morphIn.value = 1; paintRange(morphIn); drawHero(); return; }
-    const start = performance.now(), id = ++playing, dur = 2400;
+    const start = performance.now(), id = ++playing, dur = 3600;
+    // Sans to Mono, across to Round, back to Sans
+    const stops = [1, 0, 2, 1];
     const step = (now) => {
       if (id !== playing) return;
       const x = Math.min(1, (now - start) / dur);
-      // out to Inter and back to Kerf
-      const t = x < 0.5 ? 1 - ease(x * 2) : ease((x - 0.5) * 2);
+      const k = Math.min(stops.length - 2, Math.floor(x * (stops.length - 1)));
+      const local = x * (stops.length - 1) - k;
+      const t = stops[k] + (stops[k + 1] - stops[k]) * ease(local);
       morphIn.value = t; paintRange(morphIn); drawHero();
       if (x < 1) requestAnimationFrame(step);
     };
