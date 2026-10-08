@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Kerf Converter</title>
+<style>
+/* Layout: an address bar over a browser frame. Type a site, see it in Kerf,
+   flip back to compare. Pasted HTML, the bookmark and the rules sit below.
+   Same tokens as the specimen. */
+:root {
+  --sheet: #f1f2ef;
+  --panel: #f8f8f6;
+  --ink: #111214;
+  --ink-2: #5d6165;
+  --rule: #d8dad6;
+  --cut: #d92d20;
+  --score: #2457c5;
+  --sans: "Kerf Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Kerf Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
+    --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
+  --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
+}
+@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2?v=534e65bccd") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2?v=605231bee6") format("woff2"); font-weight: 100 700; font-display: swap; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--sheet); color: var(--ink); font-family: var(--sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--cut); }
+:focus-visible { outline: 2px solid var(--score); outline-offset: 2px; }
+.wrap { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--sheet) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; gap: 24px; height: 52px; }
+.brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.brand b { font-weight: 650; font-size: 1.125rem; letter-spacing: -0.01em; }
+.brand span { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-2); }
+.top nav { display: flex; gap: 20px; margin-left: auto; font-size: 0.875rem; }
+.top nav a { text-decoration: none; color: var(--ink-2); }
+.top nav a[aria-current="page"], .top nav a:hover { color: var(--ink); }
+.top .gh { font-size: 0.875rem; text-decoration: none; border: 1px solid var(--rule); border-radius: 6px; padding: 5px 10px; }
+@media (max-width: 640px) { .top nav { gap: 14px; } .top .gh { display: none; } }
+
+.intro { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 20px 64px; padding-block: 40px 24px; align-items: end; }
+.intro h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.02; font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.intro p { margin: 0; color: var(--ink-2); max-width: 58ch; }
+@media (max-width: 860px) { .intro { grid-template-columns: 1fr; } }
+
+.go { display: flex; gap: 10px; align-items: stretch; }
+.address { flex: 1; min-width: 0; display: flex; align-items: center; border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); padding-left: 14px; }
+.address:focus-within { border-color: var(--ink); }
+.address span { font-family: var(--mono); font-size: 0.9375rem; color: var(--ink-2); }
+.address input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-family: var(--mono); font-size: 0.9375rem; color: var(--ink); padding: 12px 12px 12px 2px; outline: none; }
+.btn { font: inherit; font-size: 0.875rem; color: inherit; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 11px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: var(--ink); color: inherit; }
+.btn.primary { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.btn.primary:hover { color: var(--sheet); }
+.go .btn { border-radius: 8px; padding-inline: 20px; font-size: 0.9375rem; font-weight: 500; }
+.go .btn[disabled] { opacity: 0.5; cursor: progress; }
+.picks { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 0.8125rem; color: var(--ink-2); }
+.picks button { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule); }
+.picks button:hover { color: var(--cut); text-decoration-color: currentColor; }
+
+.paste { display: grid; grid-template-columns: minmax(0, 1fr); border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); overflow: hidden; }
+textarea, .paste input { font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: var(--ink); background: transparent; border: 0; padding: 12px; outline: none; resize: vertical; width: 100%; tab-size: 2; }
+.paste textarea { min-height: 220px; white-space: pre; }
+.paste input { border-top: 1px solid var(--rule); font-size: 12px; padding: 9px 12px; }
+::placeholder { color: var(--ink-2); }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding-block: 16px 12px; font-size: 0.875rem; }
+.bar .label { color: var(--ink-2); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button { background: none; border: 0; padding: 6px 12px; cursor: pointer; font: inherit; font-size: 0.875rem; color: var(--ink-2); }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+.seg button:hover:not([aria-pressed="true"]) { color: var(--ink); }
+.stats { margin-left: auto; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); text-align: right; }
+
+.panel { border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.panel > header { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--rule); font-size: 0.8125rem; color: var(--ink-2); min-width: 0; }
+.panel > header b { font-weight: 500; color: var(--ink); }
+.where { font-family: var(--mono); font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.dots { display: flex; gap: 6px; flex: none; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--rule); }
+.stage { position: relative; height: max(480px, 74vh); background: #fff; }
+.stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.stage iframe[data-off] { visibility: hidden; }
+.note { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; background: var(--panel); font-size: 0.9375rem; }
+.note p { margin: 0; max-width: 46ch; color: var(--ink-2); }
+.note b { display: block; color: var(--ink); font-weight: 500; margin-bottom: 6px; }
+.note .bar-run { width: 160px; height: 2px; margin: 14px auto 0; background: var(--rule); overflow: hidden; }
+.note .bar-run::after { content: ""; display: block; width: 40%; height: 100%; background: var(--ink); animation: run 0.9s linear infinite; }
+@keyframes run { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+@media (prefers-reduced-motion: reduce) { .note .bar-run::after { animation: none; width: 100%; } }
+
+details.panel { margin-top: 20px; }
+details.panel > summary { list-style: none; cursor: pointer; display: flex; gap: 10px; align-items: center; padding: 10px 12px; font-size: 0.8125rem; color: var(--ink-2); }
+details.panel > summary::-webkit-details-marker { display: none; }
+details.panel > summary b { font-weight: 500; color: var(--ink); }
+details.panel > summary::before { content: "+"; font-family: var(--mono); color: var(--ink); width: 1ch; }
+details.panel[open] > summary::before { content: "−"; }
+details.panel[open] > summary { border-bottom: 1px solid var(--rule); }
+.out textarea { min-height: 260px; resize: vertical; white-space: pre; }
+.out footer { display: flex; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--rule); }
+
+section.plate { border-top: 1px solid var(--rule); padding-block: 48px; margin-top: 56px; }
+.plate h2 { font-size: clamp(1.75rem, 3.4vw, 2.5rem); line-height: 1.05; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 12px; }
+.plate p { margin: 0 0 16px; color: var(--ink-2); max-width: 64ch; }
+.live { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px 40px; align-items: start; }
+.bookmarklet { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 8px; border: 1.5px dashed var(--ink-2); background: var(--panel); cursor: grab; }
+.bookmarklet:hover { border-color: var(--cut); color: var(--ink); }
+.steps { margin: 16px 0 0; padding-left: 20px; color: var(--ink-2); font-size: 0.9375rem; display: grid; gap: 6px; }
+@media (max-width: 900px) { .live { grid-template-columns: 1fr; } }
+table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 500; color: var(--ink-2); font-size: 0.8125rem; }
+td code, p code { font-family: var(--mono); font-size: 0.8125rem; }
+.table-scroll { overflow-x: auto; }
+footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-size: 0.8125rem; color: var(--ink-2); }
+@media (max-width: 640px) { .stats { margin-left: 0; text-align: left; flex-basis: 100%; } .go .btn { padding-inline: 14px; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><b>Kerf</b><span>v0.1</span></a>
+    <nav aria-label="Pages">
+      <a href="/">Specimen</a>
+      <a href="/map">Map</a>
+      <a href="/convert" aria-current="page">Convert</a>
+    </nav>
+    <a class="gh" href="https://github.com/Kevin-Liu-01/Kerf" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap intro">
+    <h1>See any site in Kerf</h1>
+    <p>Type an address and the page comes back with every font swapped for Kerf: body and headings in the member you pick, code in Kerf Mono, serif in Kerf Text. The rewrite runs in your browser and is deterministic, so the same page always converts the same way.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Source" id="mode" style="margin-bottom: 12px">
+      <button type="button" data-v="url" aria-pressed="true">Address</button>
+      <button type="button" data-v="html" aria-pressed="false">Paste HTML</button>
+    </div>
+
+    <div id="by-url">
+      <form class="go" id="go" autocomplete="off">
+        <label class="address"><span>https://</span><input id="url" type="text" inputmode="url" spellcheck="false" placeholder="generaltranslation.com" aria-label="Site address"></label>
+        <button class="btn primary" type="submit" id="go-btn">Convert</button>
+      </form>
+      <div class="picks"><span>Try</span>
+        <button type="button" data-url="generaltranslation.com">generaltranslation.com</button>
+        <button type="button" data-url="en.wikipedia.org/wiki/Typeface">wikipedia.org</button>
+        <button type="button" data-url="news.ycombinator.com">news.ycombinator.com</button>
+        <button type="button" data-url="github.com/rsms/inter">github.com/rsms/inter</button>
+      </div>
+    </div>
+
+    <div id="by-html" hidden>
+      <div class="paste">
+        <textarea id="input" spellcheck="false" aria-label="HTML to convert" placeholder="Paste a page's HTML (View Source, then copy all) or any fragment."></textarea>
+        <input type="url" id="base" placeholder="The page's address (optional), so its linked stylesheets, images and fonts load too" aria-label="Page address for relative links">
+      </div>
+    </div>
+
+    <div class="bar">
+      <span class="label">Set in</span>
+      <div class="seg" role="group" aria-label="Kerf member for body text" id="member">
+        <button type="button" data-v="sans" aria-pressed="true">Kerf Sans</button>
+        <button type="button" data-v="round" aria-pressed="false">Kerf Round</button>
+        <button type="button" data-v="text" aria-pressed="false">Kerf Text</button>
+      </div>
+      <div class="seg" role="group" aria-label="Before or after" id="view">
+        <button type="button" data-v="before" aria-pressed="false">Before</button>
+        <button type="button" data-v="after" aria-pressed="true">Kerf</button>
+      </div>
+      <span class="stats" id="stats" aria-live="polite"></span>
+    </div>
+
+    <div class="panel">
+      <header><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="where" id="where">Nothing loaded yet</span><a class="btn" id="original" href="#" target="_blank" rel="noopener" hidden>Original ↗</a></header>
+      <div class="stage">
+        <iframe id="after" sandbox="allow-scripts" title="The page in Kerf"></iframe>
+        <iframe id="before" sandbox="allow-scripts" title="The page as it was" data-off></iframe>
+        <div class="note" id="note"><div><b>Type an address above</b><p>Links inside the preview open their page in Kerf too. Scripts from the page do not run, so anything a site draws with JavaScript stays blank.</p></div></div>
+      </div>
+    </div>
+
+    <details class="panel out" id="code">
+      <summary><b>Converted HTML</b><span id="code-size"></span></summary>
+      <textarea id="output" readonly spellcheck="false" aria-label="Converted HTML"></textarea>
+      <footer>
+        <button class="btn primary" type="button" id="copy-out">Copy HTML</button>
+        <a class="btn" id="download" download="kerf.html" href="#">Download .html</a>
+      </footer>
+    </details>
+
+    <section class="plate" id="live">
+      <div class="live">
+        <div>
+          <h2>On the live site</h2>
+          <p>The preview is a copy without the site's scripts. To convert the real page, with its scripts running and while you are signed in, run the converter inside it. It rewrites the stylesheets it can read, sweeps every element once, and converts content a single-page app adds later. Reload to undo.</p>
+          <a class="bookmarklet" id="bookmarklet" href="#">Kerf this page</a>
+          <ol class="steps">
+            <li>Drag the button above to your bookmarks bar.</li>
+            <li>Open any site and click the bookmark.</li>
+            <li>Or paste the snippet into the browser console (⌥⌘J or Ctrl+Shift+J).</li>
+          </ol>
+          <p style="margin-top: 16px; font-size: 0.875rem">A site whose Content Security Policy blocks other domains' fonts or scripts can stop the bookmark or keep Kerf from loading.</p>
+        </div>
+        <div class="panel out">
+          <header><b>Console snippet</b><span>the same code as the bookmark</span></header>
+          <textarea id="snippet" readonly spellcheck="false" aria-label="Console snippet" style="min-height: 180px"></textarea>
+          <footer><button class="btn primary" type="button" id="copy-snippet">Copy snippet</button></footer>
+        </div>
+      </div>
+    </section>
+
+    <section class="plate" id="rules">
+      <h2>How it decides</h2>
+      <p>Each font stack is judged by its first family, then by its generic fallback. Kerf goes in front and the original stack stays behind it, so any character Kerf does not have falls back to the font the site had. Sites that set fonts through CSS variables are converted where the variable is defined.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>The stack starts with</th><th>Becomes</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>A monospace family, or ends in <code>monospace</code></td><td>Kerf Mono</td><td><code>"SF Mono", Menlo, monospace</code></td></tr>
+            <tr><td>A serif family, or ends in <code>serif</code></td><td>Kerf Text</td><td><code>Georgia, serif</code></td></tr>
+            <tr><td>An icon or emoji font</td><td>Unchanged</td><td><code>"Material Symbols Outlined"</code></td></tr>
+            <tr><td><code>var(--x)</code></td><td>Unchanged; <code>--x</code> is converted</td><td><code>--font-sans: Inter, sans-serif</code></td></tr>
+            <tr><td><code>inherit</code>, <code>initial</code> or <code>unset</code></td><td>Unchanged</td><td><code>font-family: inherit</code></td></tr>
+            <tr><td>Anything else</td><td>The member you pick</td><td><code>Inter, system-ui, sans-serif</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top: 20px; font-size: 0.875rem">Browsers do not let one site read another's pages, so an address goes through a small relay on this site, <code>/api/fetch</code>, which returns the page, stylesheet and font bytes and nothing else. Pasted HTML never leaves the page.</p>
+    </section>
+  </div>
+</main>
+<footer class="page"><div class="wrap">Kerf is free and open source under the SIL Open Font License 1.1. The converter is <a href="kerf-apply.js?v=fe4d05a800">kerf-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Kerf-Website">Kerf website</a>.</div></footer>
+
+<script src="kerf-apply.js?v=fe4d05a800"></script>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const K = window.KerfConvert;
+  const RELAY = new URL("/api/fetch", location.href).href;
+  const FONTS = new URL("/fonts/", location.href).href;
+  const state = { mode: "url", member: "sans", view: "after", source: null, scroll: 0 };
+  const cache = new Map(); // absolute URL -> Promise<{ text, url, bytes } | null>
+  let applySource = "";
+  let token = 0;
+
+  const relayed = (url) => `${RELAY}?url=${encodeURIComponent(url)}`;
+
+  // pages and stylesheets come back as bytes; decode them with the charset the site declared
+  async function relay(url) {
+    const r = await fetch(relayed(url));
+    if (!r.ok) throw new Error((await r.text()) || `The relay answered ${r.status}.`);
+    const bytes = await r.arrayBuffer();
+    let charset = /charset=([\w-]+)/i.exec(r.headers.get("content-type") || "")?.[1];
+    if (!charset) charset = /<meta[^>]+charset=["']?([\w-]+)/i.exec(new TextDecoder("latin1").decode(bytes.slice(0, 2048)))?.[1];
+    let text;
+    try { text = new TextDecoder(charset || "utf-8").decode(bytes); } catch { text = new TextDecoder().decode(bytes); }
+    return { text, url: r.headers.get("x-final-url") || url, bytes: bytes.byteLength };
+  }
+  const sheet = (url) => {
+    if (!cache.has(url)) cache.set(url, relay(url).catch(() => null));
+    return cache.get(url);
+  };
+
+  async function sheetsFor(html, base) {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const own = doc.querySelector("base[href]")?.getAttribute("href");
+    const b = new URL(own || "", base).href;
+    const hrefs = [...doc.querySelectorAll('link[rel~="stylesheet" i][href]')]
+      .map((l) => { try { return new URL(l.getAttribute("href"), b).href; } catch { return null; } })
+      .filter((u) => u && /^https?:/.test(u));
+    const got = await Promise.all(hrefs.map(sheet));
+    const sheets = new Map();
+    let bytes = 0;
+    hrefs.forEach((h, i) => { if (got[i]) { sheets.set(h, got[i].text); bytes += got[i].bytes; } });
+    return { sheets, bytes, linked: hrefs.length };
+  }
+
+  function normalize(raw) {
+    let s = raw.trim();
+    if (!s) return null;
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s.replace(/^\/+/, "");
+    try { const u = new URL(s); return /\./.test(u.hostname) ? u.href : null; } catch { return null; }
+  }
+
+  function note(title, text, busy) {
+    $("#note").hidden = false;
+    $("#note").innerHTML = `<div><b></b><p></p>${busy ? '<div class="bar-run"></div>' : ""}</div>`;
+    $("#note b").textContent = title;
+    $("#note p").textContent = text || "";
+  }
+
+  async function loadURL(raw, push = true) {
+    const url = normalize(raw);
+    if (!url) { note("That does not look like an address", "Try something like generaltranslation.com."); return; }
+    const mine = ++token;
+    $("#url").value = url.replace(/^https:\/\//, "").replace(/\/$/, "");
+    $("#go-btn").disabled = true;
+    note(`Fetching ${new URL(url).host}`, "The page, then its stylesheets.", true);
+    try {
+      const page = await relay(url);
+      const { sheets, bytes, linked } = await sheetsFor(page.text, page.url);
+      if (mine !== token) return;
+      state.source = { html: page.text, base: page.url, sheets, bytes: page.bytes + bytes, linked };
+      state.scroll = 0;
+      if (push) {
+        const q = new URLSearchParams({ url: page.url.replace(/^https:\/\//, "") });
+        if (state.member !== "sans") q.set("kerf", state.member);
+        history.replaceState(null, "", `?${q}`);
+      }
+      render(true);
+    } catch (e) {
+      if (mine !== token) return;
+      note(`Could not convert ${new URL(url).host}`, `${e.message} Some sites refuse automated requests; paste the page's HTML instead, or use the bookmark below on the live site.`);
+    } finally {
+      if (mine === token) $("#go-btn").disabled = false;
+    }
+  }
+
+  let pasteTimer = 0;
+  async function loadPaste() {
+    const html = $("#input").value;
+    const mine = ++token;
+    if (!html.trim()) { state.source = null; note("Paste some HTML", "A whole page or a fragment."); $("#stats").textContent = ""; return; }
+    const base = normalize($("#base").value || "");
+    const extra = base ? await sheetsFor(html, base) : { sheets: new Map(), bytes: 0, linked: 0 };
+    if (mine !== token) return;
+    state.source = { html, base, ...extra, bytes: html.length + extra.bytes };
+    render(true);
+  }
+
+  // Inside the preview: report scrolling, accept a scroll position, and send link
+  // clicks back here so the next page converts too.
+  const FRAME_SCRIPT = `(()=>{let t=0;addEventListener("scroll",()=>{cancelAnimationFrame(t);t=requestAnimationFrame(()=>parent.postMessage({kerf:"scroll",y:scrollY},"*"))},{passive:true});
+addEventListener("message",e=>{if(e.data&&e.data.kerf==="scrollTo")scrollTo(0,e.data.y)});
+addEventListener("click",e=>{const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;e.preventDefault();const h=a.getAttribute("href");
+if(h.startsWith("#")){const t=document.getElementById(decodeURIComponent(h.slice(1)));if(t)t.scrollIntoView();return}
+if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true)})();`;
+
+  // the preview copy runs none of the page's scripts, handlers, refreshes or policies
+  function previewDoc(doc, kerf) {
+    doc.querySelectorAll('script, noscript, object, embed, meta[http-equiv], link[rel~="preload" i], link[rel~="modulepreload" i], link[rel~="prefetch" i]').forEach((n) => n.remove());
+    for (const el of doc.querySelectorAll("*")) {
+      for (const a of [...el.attributes]) if (/^on/i.test(a.name) || a.name === "integrity" || a.name === "crossorigin" || a.name === "nonce") el.removeAttribute(a.name);
+    }
+    const s = doc.createElement("script");
+    s.textContent = FRAME_SCRIPT + (kerf && applySource
+      ? `\n${applySource}\n;KerfConvert.apply(${JSON.stringify({ sans: state.member, fontBase: FONTS })});`
+      : "");
+    doc.body.append(s);
+    return "<!doctype html>\n" + doc.documentElement.outerHTML;
+  }
+
+  let downloadURL = "";
+  function render(fresh) {
+    const src = state.source;
+    if (!src) return;
+    const opts = { sans: state.member, base: src.base, sheets: src.sheets, fontBase: FONTS, fontURL: src.base ? relayed : null };
+    const t0 = performance.now();
+    const after = K.rewriteHTML(src.html, opts);
+    const ms = performance.now() - t0;
+    $("#output").value = after.html;
+    $("#code-size").textContent = `${(after.html.length / 1024).toFixed(0)} KB`;
+    if (downloadURL) URL.revokeObjectURL(downloadURL);
+    downloadURL = URL.createObjectURL(new Blob([after.html], { type: "text/html" }));
+    $("#download").href = downloadURL;
+    $("#download").download = `${src.base ? new URL(src.base).hostname : "page"}-kerf.html`;
+
+    const counts = Object.entries(after.stats).filter(([k, v]) => v && k !== "icon").map(([k, v]) => `${v} ${k.replace("Kerf ", "")}`);
+    $("#stats").textContent = `${counts.join(" · ") || "no font declarations"} · ${src.linked ? `${src.sheets.size}/${src.linked} stylesheets · ` : ""}${(src.bytes / 1024).toFixed(src.bytes < 10240 ? 1 : 0)} KB · converted in ${ms.toFixed(0)} ms`;
+
+    $("#where").textContent = src.base || "Pasted HTML";
+    $("#original").hidden = !src.base;
+    if (src.base) $("#original").href = src.base;
+    $("#note").hidden = true;
+    $("#after").srcdoc = previewDoc(after.doc, true);
+    if (fresh) $("#before").srcdoc = previewDoc(K.rewriteHTML(src.html, { ...opts, convert: false }).doc, false);
+  }
+
+  function show(view) {
+    state.view = view;
+    const on = view === "after" ? $("#after") : $("#before");
+    const off = view === "after" ? $("#before") : $("#after");
+    on.contentWindow?.postMessage({ kerf: "scrollTo", y: state.scroll }, "*");
+    on.removeAttribute("data-off");
+    off.setAttribute("data-off", "");
+  }
+
+  addEventListener("message", (e) => {
+    const frames = [$("#after").contentWindow, $("#before").contentWindow];
+    if (!frames.includes(e.source) || !e.data) return;
+    if (e.data.kerf === "scroll") state.scroll = e.data.y;
+    if (e.data.kerf === "go" && /^https?:\/\//.test(e.data.href)) { setMode("url"); loadURL(e.data.href); }
+  });
+  // a re-rendered frame returns to where the reader was
+  for (const f of [$("#after"), $("#before")]) f.addEventListener("load", () => f.contentWindow.postMessage({ kerf: "scrollTo", y: state.scroll }, "*"));
+
+  function liveCode() {
+    const call = `KerfConvert.apply(${JSON.stringify({ sans: state.member })});`;
+    $("#snippet").value = `${applySource}\n${call}`;
+    $("#bookmarklet").href = "javascript:" + encodeURIComponent(`(()=>{${applySource}\n${call}})();void 0`);
+    $("#bookmarklet").textContent = `Kerf this page (${K.MEMBERS[state.member]})`;
+  }
+
+  function press(group, value) {
+    $(group).querySelectorAll("button[data-v]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === value));
+  }
+  function setMode(mode) {
+    state.mode = mode;
+    press("#mode", mode);
+    $("#by-url").hidden = mode !== "url";
+    $("#by-html").hidden = mode !== "html";
+  }
+  function wire(group, fn) {
+    $(group).addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-v]");
+      if (!b) return;
+      press(group, b.dataset.v);
+      fn(b.dataset.v);
+    });
+  }
+  wire("#mode", (v) => { setMode(v); (v === "html" ? $("#input") : $("#url")).focus(); });
+  wire("#member", (v) => {
+    state.member = v;
+    const q = new URLSearchParams(location.search);
+    if (v === "sans") q.delete("kerf"); else q.set("kerf", v);
+    history.replaceState(null, "", q.toString() ? `?${q}` : location.pathname);
+    render(false);
+    liveCode();
+  });
+  wire("#view", show);
+  $("#go").addEventListener("submit", (e) => { e.preventDefault(); loadURL($("#url").value); });
+  document.querySelectorAll(".picks button").forEach((b) => b.addEventListener("click", () => loadURL(b.dataset.url)));
+  const schedulePaste = () => { clearTimeout(pasteTimer); pasteTimer = setTimeout(loadPaste, 200); };
+  $("#input").addEventListener("input", schedulePaste);
+  $("#base").addEventListener("input", schedulePaste);
+  $("#bookmarklet").addEventListener("click", (e) => e.preventDefault());
+  function copier(button, source, label) {
+    $(button).addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText($(source).value); $(button).textContent = "Copied"; }
+      catch { $(source).select(); $(button).textContent = "Selected, press Copy"; }
+      setTimeout(() => ($(button).textContent = label), 1600);
+    });
+  }
+  copier("#copy-out", "#output", "Copy HTML");
+  copier("#copy-snippet", "#snippet", "Copy snippet");
+
+  const q = new URLSearchParams(location.search);
+  if (K.MEMBERS[q.get("kerf")]) { state.member = q.get("kerf"); press("#member", state.member); }
+  const ready = fetch($('script[src^="kerf-apply.js?v=fe4d05a800"]').getAttribute("src"))
+    .then((r) => r.text())
+    .then((t) => { applySource = t.trim(); liveCode(); });
+  if (q.get("url")) ready.then(() => loadURL(q.get("url"), false));
+})();
+</script>
+
+</body>
+</html>
