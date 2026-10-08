@@ -1,4 +1,5 @@
 <title>Kerf Type Family</title>
+<link rel="stylesheet" href="fonts/kerf.css">
 <style>
 /* Layout: one long drawing sheet. A construction drawing of the name opens it; each section below is a plate on the same 12-column grid, separated by hairlines. Colors follow laser-cutter convention: red hairlines cut, blue hairlines score. */
 :root {
@@ -36,10 +37,6 @@
   --syn-fn: #d0a6ff; --syn-type: #5fd3dc; --syn-punc: #9fabc0; --syn-var: #ffad66;
 }
 
-@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2") format("woff2"); font-weight: 100 700; font-display: swap; }
-@font-face { font-family: "Kerf Round"; src: url("fonts/KerfRound.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Kerf Text"; src: url("fonts/KerfText.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -61,6 +58,7 @@ p { margin: 0; max-width: 62ch; }
 .top .wrap { display: flex; align-items: center; gap: 24px; height: 52px; }
 .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
 .brand b { font-weight: 650; font-size: 1.125rem; letter-spacing: -0.01em; }
+.brand .mark { width: 0.82rem; height: 0.82rem; fill: currentColor; flex: none; margin-right: -2px; }
 .brand span { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-2); }
 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 0.875rem; }
 .top nav a { text-decoration: none; color: var(--ink-2); }
@@ -250,6 +248,12 @@ td.n { font-family: var(--mono); font-size: 0.875rem; font-variant-numeric: tabu
 .bore canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
 .bore canvas:active { cursor: grabbing; }
 .bore canvas:focus-visible { box-shadow: inset 0 0 0 2px var(--score); }
+/* the wall's label: GLYPH in square bars, read bottom to top on a paper band, with two blue scores */
+.bore .lockup { --band: clamp(76px, 7vw, 116px); position: absolute; inset: 0 auto 0 0; width: var(--band); z-index: 1; display: grid; place-items: end center; padding-block: 28px; background: var(--sheet); border-right: 1px solid var(--rule); pointer-events: none; }
+.bore .lockup svg { width: calc(var(--band) - 34px); height: auto; fill: var(--ink); shape-rendering: crispEdges; }
+.bore .lockup .score { fill: color-mix(in srgb, var(--score) 55%, var(--ink)); shape-rendering: geometricPrecision; }
+.bore:has(.lockup) :is(.hud-bl, .hud-tl) { left: calc(clamp(76px, 7vw, 116px) + 16px); }
+@media (max-width: 860px) { .bore .lockup { display: none; } .bore:has(.lockup) :is(.hud-bl, .hud-tl) { left: var(--gutter); } }
 .hud { position: absolute; font-family: var(--mono); font-size: 12px; line-height: 1.4; color: var(--ink-2); pointer-events: none; padding: 5px 9px; border-radius: 4px; background: color-mix(in srgb, var(--sheet) 82%, transparent); }
 .hud:empty { display: none; }
 .hud-tl { top: 14px; left: var(--gutter); }
@@ -309,7 +313,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top"><b>Kerf</b><span>v0.1</span></a>
+    <a class="brand" href="#top"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Kerf</b><span>v0.1</span></a>
     <nav aria-label="Sections">
       <a href="#curves">Curves</a>
       <a href="#family">Family</a>
@@ -429,12 +433,12 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
       <div class="fam" id="fam-text" data-fam="text" hidden>
         <div class="plate-head">
           <h2>Kerf Text</h2>
-          <p>The reading member. It drops the squaring and moves Inter toward PP Mori's proportions: every glyph is 4 percent smaller on the same line height, the spacing is tighter, round letters and capitals are wider, and c, e, s, a and g are cut level. Nine weights from Thin to Black, with the heavy weights lighter than Inter's.</p>
+          <p>The reading member. Its x-height is 0.71 of the cap height (Inter's is 0.75), every glyph is 4 percent smaller on the same line height, the spacing is tighter, and round letters and capitals are wider. Nine weights from Thin to Black, with the heavy weights lighter than Inter's.</p>
         </div>
-        <div class="display-line edit" style="font-weight:500" aria-label="Kerf Text display line, editable">Rounder bowls, level cuts.</div>
+        <div class="display-line edit" style="font-weight:500" aria-label="Kerf Text display line, editable">A tailed l, a slanted t, a lower x-height.</div>
         <div class="reading">
           <div><div class="cap">14 px / 400</div><p class="edit" style="font-size:14px;line-height:1.6">A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again. Typefaces are cut too, from older shapes, and each recut leaves its own mark.</p></div>
-          <div><div class="cap">16 px / 400</div><p class="edit" style="font-size:16px;line-height:1.6">The a is redrawn: its bowl has a level top that meets the stem square, and its stem ends in a foot with a vertical cut. O and Q are 5 percent wider than Inter's, H 4 percent, o 3 percent. Its 1 has a long flag and its G has a spur.</p></div>
+          <div><div class="cap">16 px / 400</div><p class="edit" style="font-size:16px;line-height:1.6">The f is compact, the l has a tail, and the top of the t is cut at a slant. The a has a straight stem and its arch is cut level, as are c, e, s and g. O and Q are 5 percent wider than Inter's, H 4 percent. Its 1 has a long flag and its G has a spur.</p></div>
           <div><div class="cap">20 px / 400</div><p class="edit" style="font-size:20px;line-height:1.5">Weight 700 in Kerf Text is Inter's 640, and 800 is Inter's 760.</p></div>
         </div>
         <div class="ladder" id="ladder-text"></div>
@@ -443,7 +447,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
       <div class="fam" id="fam-mono" data-fam="mono" hidden>
         <div class="plate-head">
           <h2>Kerf Mono</h2>
-          <p>Kerf Sans fitted to a cell 1280 units wide, 0.625 em. Letters fill the cell evenly with their stems held, m and w run nearly edge to edge, f, t and r reach out on their arms, and every character that could be mistaken for another has its own shape. Seven weights from Thin to Bold.</p>
+          <p>Kerf Sans fitted to a cell 1280 units wide, 0.625 em. Letters fill the cell evenly with their stems held, m and w run nearly edge to edge, f, t and r reach out on their arms, and every character that could be mistaken for another has its own shape. Code ligatures for -&gt; =&gt; != == and &gt;= are opt-in through dlig, and every character keeps its own cell. Seven weights from Thin to Bold.</p>
         </div>
         <div class="editor">
           <div class="tabs" role="tablist" id="tabs" aria-label="Code samples"></div>
@@ -470,7 +474,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
           <div>
             <div class="sample edit" id="sample-sans" data-fam="sans" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Sans, editable">Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
             <div class="sample edit" id="sample-round" data-fam="round" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Round, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
-            <div class="sample edit" id="sample-text" data-fam="text" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Text, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). Kerf Text cuts c, e, s, a and g level, and its a has a level bowl top and a foot. A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again.</div>
+            <div class="sample edit" id="sample-text" data-fam="text" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Text, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). Kerf Text has a lower x-height than Inter, a compact f, an l with a tail and a t cut at a slant. A kerf is the slot a cut leaves behind. Its width depends on the tool: a fine saw blade removes less than a coarse one, and a laser removes less again.</div>
             <div class="sample edit" id="sample-mono" data-fam="mono" role="textbox" aria-multiline="true" aria-label="Sample text in Kerf Mono, editable" hidden>Fix the 0O0 and 1lI bug before Friday. Revenue: $1,280.50 (+12%). The squared bowls of a, b, d, g, o, p and q read as one family.</div>
           </div>
           <div class="panel">
@@ -507,6 +511,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
       </div>
     </div>
     <div class="bore" id="bore">
+      <div class="lockup" aria-hidden="true"><svg viewBox="35 17 82 320" aria-hidden="true"><rect x="35" y="17" width="82" height="16"/><rect x="64" y="33" width="16" height="25"/><rect x="35" y="58" width="82" height="16"/><rect x="35" y="91" width="49" height="16"/><rect x="35" y="107" width="16" height="25"/><rect x="68" y="107" width="16" height="25"/><rect x="35" y="132" width="82" height="16"/><rect x="35" y="166" width="82" height="15"/><rect x="68" y="181" width="16" height="25"/><rect x="35" y="206" width="49" height="16"/><rect x="101" y="198" width="16" height="41"/><rect x="35" y="239" width="82" height="16"/><rect x="35" y="272" width="16" height="49"/><rect x="68" y="272" width="49" height="16"/><rect x="68" y="288" width="16" height="16"/><rect x="101" y="288" width="16" height="33"/><rect x="35" y="321" width="82" height="16"/><rect class="score" x="35" y="69" width="82" height="1"/><rect class="score" x="35" y="165" width="82" height="1"/></svg></div>
       <canvas id="gpu" tabindex="0" aria-label="Glyph wall. Drag or use the arrow keys to move, Enter to pull out the glyph in the centre."></canvas>
       <div class="hud hud-tl">Drag to turn. Scroll to move. Click a glyph to pull it out.</div>
       <div class="hud hud-bl num" id="hud-row"></div>
@@ -1001,7 +1006,7 @@ fi` },
 
   /* ---------- glyphs ---------- */
   const gstate = { fam: "sans", filter: "all", view: "wall", cp: 0x52, w: 400 };
-  const GROUPS = ["all", "letters", "figures", "punctuation", "symbols", "marks", "drawing"];
+  const GROUPS = ["all", "letters", "figures", "punctuation", "symbols", "marks", "drawing", "scripts"];
   const cells = $("#cells"), insp = $("#insp"), ginfo = $("#ginfo");
   const hex = (cp) => cp.toString(16).toUpperCase().padStart(4, "0");
   const show = (cp) => (cp >= 0x300 && cp <= 0x36f ? "◌" : "") + String.fromCodePoint(cp);
@@ -1186,7 +1191,8 @@ struct VO {
     try {
       const adapter = await navigator.gpu.requestAdapter();
       if (!adapter) return null;
-      device = await adapter.requestDevice();
+      // the biggest atlas the GPU allows, so the wall holds every script at full size
+      device = await adapter.requestDevice({ requiredLimits: { maxTextureDimension2D: Math.min(16384, adapter.limits.maxTextureDimension2D) } });
     } catch { return null; }
     const ctx = canvas.getContext("webgpu");
     const format = navigator.gpu.getPreferredCanvasFormat();
@@ -1209,7 +1215,7 @@ struct VO {
     const sampler = device.createSampler({ magFilter: "linear", minFilter: "linear", mipmapFilter: "linear", maxAnisotropy: 16 });
     const uni = new Float32Array(64);
 
-    let list = [], N = 0, inst = new Float32Array(4), ibuf = null, atlasTex = null, bind = null, atlasW = 1, atlasH = 1;
+    let list = [], N = 0, inst = new Float32Array(4), ibuf = null, atlasTex = null, bind = null, atlasW = 1, atlasH = 1, atlasCell = CELL, atlasCols = ACOLS;
     let msaa = null, depth = null;
     const cam = { yaw: 0, y: 0, vyaw: 0, vy: 0, pitch: 0 };
     let hover = -1, sel = -1, popT = 0, popDir = 0, flyAlpha = 1, flyTarget = null, active = new Set();
@@ -1257,20 +1263,26 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
     let buildGen = 0;
 
     async function buildAtlas(glyphs, fam, weight, gen) {
-      const font = `${weight} 80px ${famFont(fam)}`;
-      await document.fonts.load(font);
-      const rows = Math.max(BATCH_ROWS * 2, Math.ceil(glyphs.length / ACOLS / BATCH_ROWS) * BATCH_ROWS);
-      const W = HC * ACOLS, H = HC * rows;
+      // 128 px cells while the glyphs fit the GPU's largest texture, smaller cells past that
+      const maxDim = device.limits.maxTextureDimension2D, wide = Math.min(maxDim, 8192);
+      const hc = [128, 96, 80, 64].find((c) => Math.floor(wide / c) * Math.floor(maxDim / c) >= glyphs.length) ?? 64;
+      const acols = Math.floor(wide / hc), bw = hc * acols, bh = hc * BATCH_ROWS;
+      if (raster.width !== bw || raster.height !== bh) { raster.width = bw; raster.height = bh; }
+      const font = `${weight} ${Math.round(hc * 0.625)}px ${famFont(fam)}`;
+      // every script's face loads before drawing, or canvas text falls back to a system font
+      await document.fonts.load(font, glyphs.map((c) => show(c[0])).join(""));
+      const rows = Math.min(Math.floor(maxDim / hc), Math.max(BATCH_ROWS * 2, Math.ceil(glyphs.length / acols / BATCH_ROWS) * BATCH_ROWS));
+      const W = bw, H = hc * rows;
       const tex = device.createTexture({ size: [W, H], format: "r8unorm", mipLevelCount: LEVELS, usage: TU.TEXTURE_BINDING | TU.COPY_DST | TU.RENDER_ATTACHMENT });
-      const per = ACOLS * BATCH_ROWS;
+      const per = acols * BATCH_ROWS;
       for (let b = 0; b * per < glyphs.length; b++) {
         if (gen !== buildGen) { tex.destroy(); return null; }
-        rg.fillStyle = "#000"; rg.fillRect(0, 0, BW, BH);
+        rg.fillStyle = "#000"; rg.fillRect(0, 0, bw, bh);
         rg.fillStyle = "#fff"; rg.font = font; rg.textAlign = "center"; rg.textBaseline = "alphabetic";
         for (let i = 0; i < per && b * per + i < glyphs.length; i++) {
-          rg.fillText(show(glyphs[b * per + i][0]), (i % ACOLS) * HC + HC / 2, Math.floor(i / ACOLS) * HC + 84);
+          rg.fillText(show(glyphs[b * per + i][0]), (i % acols) * hc + hc / 2, Math.floor(i / acols) * hc + hc * 0.656);
         }
-        device.queue.copyExternalImageToTexture({ source: raster }, { texture: tex, origin: [0, b * BH] }, [BW, BH]);
+        device.queue.copyExternalImageToTexture({ source: raster }, { texture: tex, origin: [0, b * bh] }, [bw, bh]);
         await new Promise((r) => setTimeout(r, 0));  // one batch per task keeps input responsive
       }
       const enc = device.createCommandEncoder();
@@ -1283,7 +1295,7 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
         rp.end();
       }
       device.queue.submit([enc.finish()]);
-      return gen === buildGen ? { tex, W, H } : (tex.destroy(), null);
+      return gen === buildGen ? { tex, W, H, cell: hc, cols: acols } : (tex.destroy(), null);
     }
 
     async function rebuild(weightOnly = false) {
@@ -1303,7 +1315,7 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
         cam.y = maxY(); cam.yaw = 0.35; cam.vy = cam.vyaw = 0;
       }
       atlasTex?.destroy();
-      atlasTex = atlas.tex; atlasW = atlas.W; atlasH = atlas.H;
+      atlasTex = atlas.tex; atlasW = atlas.W; atlasH = atlas.H; atlasCell = atlas.cell; atlasCols = atlas.cols;
       bind = device.createBindGroup({
         layout: pipeline.getBindGroupLayout(0),
         entries: [
@@ -1550,10 +1562,10 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
       uni.set(viewProj(canvas.width / canvas.height), 0);
       uni.set([0, cam.y, 0, cam.yaw], 16);
       uni.set([R, COLS, ROWP, TILE], 20);
-      uni.set([ACOLS, CELL / atlasW, CELL / atlasH, N], 24);
+      uni.set([atlasCols, atlasCell / atlasW, atlasCell / atlasH, N], 24);
       uni.set([...colors.bg, 1], 40); uni.set([...colors.plate, 1], 44); uni.set([...colors.ink, 1], 48);
       uni.set([...colors.cut, 1], 52); uni.set([...colors.rule, 1], 56);
-      uni.set([R * 0.9, R * 2.6, sel >= 0 ? Math.min(1, popT) * 0.6 : 0, CELL], 60);
+      uni.set([R * 0.9, R * 2.6, sel >= 0 ? Math.min(1, popT) * 0.6 : 0, atlasCell], 60);
       device.queue.writeBuffer(ubuf, 0, uni);
       device.queue.writeBuffer(ibuf, 0, inst);
 
@@ -1625,15 +1637,27 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
   });
 
   const narrow = innerWidth < 600;
-  const tstate = Object.fromEntries(FAMS.map((f) => [f, f === "text"
-    ? { size: narrow ? 18 : 22, weight: 400, lh: 1.5, ls: 0, feats: new Set() }
-    : { size: narrow ? 28 : 44, weight: 400, lh: 1.2, ls: 0, feats: new Set() }]));
+  // features the fonts turn on by themselves start checked; unchecking sends 0
+  const ON_BY_DEFAULT = ["calt"];
+  const tstate = Object.fromEntries(FAMS.map((f) => {
+    const feats = new Set(ON_BY_DEFAULT.filter((t) => D[f].features.some((x) => x.tag === t)));
+    return [f, f === "text"
+      ? { size: narrow ? 18 : 22, weight: 400, lh: 1.5, ls: 0, feats }
+      : { size: narrow ? 28 : 44, weight: 400, lh: 1.2, ls: 0, feats }];
+  }));
   const TS = $("#ts"), TW = $("#tw"), TL = $("#tl"), TT = $("#tt");
-  const EXTRA = { tnum: "Tabular figures", zero: "Slashed zero", frac: "Fractions", case: "Case-sensitive forms", dlig: "Discretionary ligatures", sups: "Superscript", subs: "Subscript" };
+  // names for the registered features that carry no label of their own; aalt, ccmp and locl work underneath and are not listed
+  const EXTRA = {
+    calt: "Contextual alternates", case: "Case-sensitive forms", cpsp: "Capital spacing", dlig: "Discretionary ligatures",
+    frac: "Fractions", numr: "Numerators", dnom: "Denominators", ordn: "Ordinals", pnum: "Proportional figures",
+    tnum: "Tabular figures", salt: "Stylistic alternates", sinf: "Scientific inferiors", sups: "Superscript", subs: "Subscript",
+    smcp: "Small capitals", c2sc: "Small capitals from capitals", zero: "Slashed zero",
+  };
+  const LABEL_FOR = { mono: { dlig: "Code ligatures: -> <- => != == === !== >= <=" } };
   let fam = FAMS[0];
   function renderFeats() {
     const on = tstate[fam].feats;
-    const list = D[fam].features.map((f) => ({ tag: f.tag, label: f.label || EXTRA[f.tag] })).filter((f) => f.label);
+    const list = D[fam].features.map((f) => ({ tag: f.tag, label: LABEL_FOR[fam]?.[f.tag] || f.label || EXTRA[f.tag] })).filter((f) => f.label);
     $("#feats").innerHTML = list.map((f) => `<label><input type="checkbox" data-tag="${f.tag}"${on.has(f.tag) ? " checked" : ""}><code>${f.tag}</code><span>${f.label}</span></label>`).join("");
   }
   function applyTester(f = fam) {
@@ -1641,7 +1665,8 @@ struct VOut { @builtin(position) pos: vec4f, @location(0) uv: vec2f };
     Object.assign($(`#sample-${f}`).style, {
       fontFamily: famFont(f), fontSize: `${st.size}px`, lineHeight: st.lh, letterSpacing: `${st.ls / 100}em`,
       fontVariationSettings: `"wght" ${st.weight}`,
-      fontFeatureSettings: [...st.feats].map((t) => `"${t}" 1`).join(", ") || "normal",
+      fontFeatureSettings: [...[...st.feats].map((t) => `"${t}" 1`),
+        ...ON_BY_DEFAULT.filter((t) => !st.feats.has(t) && D[f].features.some((x) => x.tag === t)).map((t) => `"${t}" 0`)].join(", ") || "normal",
     });
     if (f !== fam) return;
     $("#tso").textContent = `${st.size} px`; $("#two").textContent = st.weight;

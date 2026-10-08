@@ -1,4 +1,5 @@
 <title>Kerf Converter</title>
+<link rel="stylesheet" href="fonts/kerf.css">
 <style>
 /* Layout: an address bar over a browser frame. Type a site, see it in Kerf,
    flip back to compare. Pasted HTML, the bookmark and the rules sit below.
@@ -25,8 +26,6 @@
   --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
   --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
 }
-@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2") format("woff2"); font-weight: 100 700; font-display: swap; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -40,6 +39,7 @@ a:hover { color: var(--cut); }
 .top .wrap { display: flex; align-items: center; gap: 24px; height: 52px; }
 .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
 .brand b { font-weight: 650; font-size: 1.125rem; letter-spacing: -0.01em; }
+.brand .mark { width: 0.82rem; height: 0.82rem; fill: currentColor; flex: none; margin-right: -2px; }
 .brand span { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-2); }
 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 0.875rem; }
 .top nav a { text-decoration: none; color: var(--ink-2); }
@@ -128,7 +128,7 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><b>Kerf</b><span>v0.1</span></a>
+    <a class="brand" href="/"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Kerf</b><span>v0.1</span></a>
     <nav aria-label="Pages">
       <a href="/">Specimen</a>
       <a href="/map">Map</a>

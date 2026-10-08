@@ -11,7 +11,9 @@ It is a static site with no build step and one function. The `*-page.html` files
 | `kerf-apply.js` | the converter: classifies font stacks and rewrites CSS, HTML or a live page, all in the browser |
 | `api/fetch.mjs` | the converter's relay: fetches a public page, stylesheet or font for the browser, since CORS keeps the page from reading other sites |
 | `data.js` | metrics, character tables, OpenType features and hero outlines |
-| `fonts/*.woff2` | Kerf Sans, Kerf Round, Kerf Text and Kerf Mono |
+| `fonts/*.woff2` | each member's Latin, Greek and Cyrillic core (`KerfSans.woff2` …), one file per merged script (`KerfSans-thai.woff2` …) and the CJK companions (`KerfCJKSC.woff2` …) |
+| `fonts/kerf.css` | the `@font-face` rules: each member is one family split by unicode-range, so a page downloads only the scripts it shows |
+| `favicon.svg`, `favicon.png`, `apple-touch-icon.png` | the mark, from `tools/logo.py` |
 | `map/` | the map's grids and `map.json`, from `tools/build_map.py` |
 | `vercel.json` | cache headers, CORS on the fonts |
 

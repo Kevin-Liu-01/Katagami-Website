@@ -3,9 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
 <body>
 <title>Kerf Converter</title>
+<link rel="stylesheet" href="fonts/kerf.css?v=756a38f2ef">
 <style>
 /* Layout: an address bar over a browser frame. Type a site, see it in Kerf,
    flip back to compare. Pasted HTML, the bookmark and the rules sit below.
@@ -32,8 +36,6 @@
   --sheet: #0e0f10; --panel: #151618; --ink: #ebece9; --ink-2: #9a9ea2;
   --rule: #26282b; --cut: #ff5246; --score: #6c94ff; color-scheme: dark;
 }
-@font-face { font-family: "Kerf Sans"; src: url("fonts/KerfSans.woff2?v=7011add2b5") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Kerf Mono"; src: url("fonts/KerfMono.woff2?v=b5dc00ae3d") format("woff2"); font-weight: 100 700; font-display: swap; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -47,6 +49,7 @@ a:hover { color: var(--cut); }
 .top .wrap { display: flex; align-items: center; gap: 24px; height: 52px; }
 .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
 .brand b { font-weight: 650; font-size: 1.125rem; letter-spacing: -0.01em; }
+.brand .mark { width: 0.82rem; height: 0.82rem; fill: currentColor; flex: none; margin-right: -2px; }
 .brand span { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-2); }
 .top nav { display: flex; gap: 20px; margin-left: auto; font-size: 0.875rem; }
 .top nav a { text-decoration: none; color: var(--ink-2); }
@@ -135,7 +138,7 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><b>Kerf</b><span>v0.1</span></a>
+    <a class="brand" href="/"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Kerf</b><span>v0.1</span></a>
     <nav aria-label="Pages">
       <a href="/">Specimen</a>
       <a href="/map">Map</a>
@@ -250,9 +253,9 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
     </section>
   </div>
 </main>
-<footer class="page"><div class="wrap">Kerf is free and open source under the SIL Open Font License 1.1. The converter is <a href="kerf-apply.js?v=fe4d05a800">kerf-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Kerf-Website">Kerf website</a>.</div></footer>
+<footer class="page"><div class="wrap">Kerf is free and open source under the SIL Open Font License 1.1. The converter is <a href="kerf-apply.js?v=f9fea31a1a">kerf-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Kerf-Website">Kerf website</a>.</div></footer>
 
-<script src="kerf-apply.js?v=fe4d05a800"></script>
+<script src="kerf-apply.js?v=f9fea31a1a"></script>
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
@@ -467,7 +470,7 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
 
   const q = new URLSearchParams(location.search);
   if (K.MEMBERS[q.get("kerf")]) { state.member = q.get("kerf"); press("#member", state.member); }
-  const ready = fetch($('script[src^="kerf-apply.js?v=fe4d05a800"]').getAttribute("src"))
+  const ready = fetch($('script[src^="kerf-apply.js?v=f9fea31a1a"]').getAttribute("src"))
     .then((r) => r.text())
     .then((t) => { applySource = t.trim(); liveCode(); });
   if (q.get("url")) ready.then(() => loadURL(q.get("url"), false));
