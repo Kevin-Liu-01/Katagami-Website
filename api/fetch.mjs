@@ -80,7 +80,7 @@ export async function GET(request) {
   const type = response.headers.get("content-type") || "";
   const font = FONT.test(type) || (UNTYPED.test(type.split(";")[0].trim()) && FONT_FILE.test(new URL(target).pathname));
   const text = PAGE.test(type) || STYLE.test(type);
-  if (!text && !font) return fail(415, `Kerf converts pages, stylesheets and fonts; ${host} sent ${type || "an untyped file"}.`);
+  if (!text && !font) return fail(415, `Katagami converts pages, stylesheets and fonts; ${host} sent ${type || "an untyped file"}.`);
   if (Number(response.headers.get("content-length")) > MAX_BYTES) return fail(413, "That file is over 8 MB.");
 
   const chunks = [];

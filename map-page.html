@@ -1,5 +1,5 @@
-<title>Kerf Map</title>
-<link rel="stylesheet" href="fonts/kerf.css">
+<title>Katagami Map</title>
+<link rel="stylesheet" href="fonts/katagami.css">
 <style>
 /* Layout: a survey sheet. A plain header, the coverage figures, then one
    full-width chart with a graticule; the letters are the data. Same tokens
@@ -12,8 +12,8 @@
   --rule: #d8dad6;
   --cut: #d92d20;
   --score: #2457c5;
-  --sans: "Kerf Round", "Kerf Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Kerf Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: "Katagami Round", "Katagami Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Katagami Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --gutter: clamp(16px, 4vw, 40px);
 }
 @media (prefers-color-scheme: dark) {
@@ -99,7 +99,7 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Kerf</b><span>v0.1</span></a>
+    <a class="brand" href="/"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Katagami</b><span>v0.1</span></a>
     <nav aria-label="Pages">
       <a href="/">Specimen</a>
       <a href="/map" aria-current="page">Map</a>
@@ -112,13 +112,13 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
 <main>
   <div class="wrap intro">
     <div>
-      <h1>Where Kerf writes</h1>
+      <h1>Where Katagami writes</h1>
     </div>
-    <p>Every land cell is a letter from the language spoken there, set in Kerf. Where a script is not covered yet, the cell shows a + instead, so the map is also the font's coverage. Heavier letters mean more people per square kilometre. Kerf draws Latin, Greek and Cyrillic; 19 more scripts are merged in from Noto Sans, and Chinese, Japanese and Korean come from the Kerf CJK companions. Chinese, Japanese and Korean count as covered only when the font has the whole national character standard.</p>
+    <p>Every land cell is a letter from the language spoken there, set in Katagami. Where a script is not covered yet, the cell shows a + instead, so the map is also the font's coverage. Heavier letters mean more people per square kilometre. Katagami draws Latin, Greek and Cyrillic; 19 more scripts are merged in from Noto Sans, and Chinese, Japanese and Korean come from the Katagami CJK companions. Chinese, Japanese and Korean count as covered only when the font has the whole national character standard.</p>
   </div>
   <div class="wrap">
     <div class="stats" id="stats">
-      <div class="stat"><b id="st-people">–</b><span>of people live where the main language is one Kerf writes</span></div>
+      <div class="stat"><b id="st-people">–</b><span>of people live where the main language is one Katagami writes</span></div>
       <div class="stat"><b id="st-langs">–</b><span>of the map's languages written in full</span></div>
       <div class="stat"><b id="st-land">–</b><span>of mapped land</span></div>
     </div>
@@ -156,7 +156,7 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
     </div>
   </div>
   <div class="wrap notes">
-    <p>Each cell is assigned to its country or territory, and a cell where several languages are spoken picks one by an ordered dither in proportion to their shares, so a region reads as its mix. The letter in a cell is the language's own, chosen at random from the letters Kerf has, and the same cell always draws the same letter.</p>
+    <p>Each cell is assigned to its country or territory, and a cell where several languages are spoken picks one by an ordered dither in proportion to their shares, so a region reads as its mix. The letter in a cell is the language's own, chosen at random from the letters Katagami has, and the same cell always draws the same letter.</p>
     <p id="sources">Map data from General Translation's world language map: languages, letters and names from Unicode CLDR, borders from Natural Earth, and population from GHS-POP (European Commission, CC BY 4.0). <a href="map/LICENSE.txt">Data notices</a>.</p>
   </div>
 </main>
@@ -165,7 +165,7 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
 (() => {
   const $ = (s) => document.querySelector(s);
   const DATA_URL = "map/map.json";
-  const FAMILY = { round: '"Kerf Round"', sans: '"Kerf Sans"', text: '"Kerf Text"', mono: '"Kerf Mono"' };
+  const FAMILY = { round: '"Katagami Round"', sans: '"Katagami Sans"', text: '"Katagami Text"', mono: '"Katagami Mono"' };
   // a family's faces split by script; load the ones for every letter the map draws in it
   const loadFamily = (fam) => document.fonts.load(`400 20px ${FAMILY[fam]}`, D.charsets[fam] || "a");
   const MAX_WEIGHT = { round: 900, sans: 900, mono: 700 };
@@ -310,7 +310,7 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
         const key = p.keys[pick(level, col, row, p)];
         const ok = cov.keys.has(key);
         const t = ok ? tones[D.sets[key].script] ?? tones.Latn : tones.none;
-        // covered land reads clearly darker than land Kerf cannot write yet
+        // covered land reads clearly darker than land Katagami cannot write yet
         const a = ok ? (state.weigh ? 0.55 + 0.45 * densityPlace(level.dens[i]) : 0.85) : 0.16;
         img.data.set([t[0], t[1], t[2], Math.round(a * 255)], i * 4);
       }

@@ -8,10 +8,10 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
 <body>
-<title>Kerf Converter</title>
-<link rel="stylesheet" href="fonts/kerf.css?v=756a38f2ef">
+<title>Katagami Converter</title>
+<link rel="stylesheet" href="fonts/katagami.css?v=7663d93180">
 <style>
-/* Layout: an address bar over a browser frame. Type a site, see it in Kerf,
+/* Layout: an address bar over a browser frame. Type a site, see it in Katagami,
    flip back to compare. Pasted HTML, the bookmark and the rules sit below.
    Same tokens as the specimen. */
 :root {
@@ -22,8 +22,8 @@
   --rule: #d8dad6;
   --cut: #d92d20;
   --score: #2457c5;
-  --sans: "Kerf Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Kerf Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: "Katagami Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Katagami Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --gutter: clamp(16px, 4vw, 40px);
 }
 @media (prefers-color-scheme: dark) {
@@ -138,7 +138,7 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Kerf</b><span>v0.1</span></a>
+    <a class="brand" href="/"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 0 L31 0 L31 100 L0 100 Z"/><path d="M38 0 L100 0 L100 30 L38 50 Z"/><path d="M38 50 L100 70 L100 100 L38 100 Z"/></svg><b>Katagami</b><span>v0.1</span></a>
     <nav aria-label="Pages">
       <a href="/">Specimen</a>
       <a href="/map">Map</a>
@@ -150,8 +150,8 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
 
 <main>
   <div class="wrap intro">
-    <h1>See any site in Kerf</h1>
-    <p>Type an address and the page comes back with every font swapped for Kerf: body and headings in the member you pick, code in Kerf Mono, serif in Kerf Text. The rewrite runs in your browser and is deterministic, so the same page always converts the same way.</p>
+    <h1>See any site in Katagami</h1>
+    <p>Type an address and the page comes back with every font swapped for Katagami: body and headings in the member you pick, code in Katagami Mono, serif in Katagami Text. The rewrite runs in your browser and is deterministic, so the same page always converts the same way.</p>
   </div>
 
   <div class="wrap">
@@ -182,14 +182,14 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
 
     <div class="bar">
       <span class="label">Set in</span>
-      <div class="seg" role="group" aria-label="Kerf member for body text" id="member">
-        <button type="button" data-v="sans" aria-pressed="true">Kerf Sans</button>
-        <button type="button" data-v="round" aria-pressed="false">Kerf Round</button>
-        <button type="button" data-v="text" aria-pressed="false">Kerf Text</button>
+      <div class="seg" role="group" aria-label="Katagami member for body text" id="member">
+        <button type="button" data-v="sans" aria-pressed="true">Katagami Sans</button>
+        <button type="button" data-v="round" aria-pressed="false">Katagami Round</button>
+        <button type="button" data-v="text" aria-pressed="false">Katagami Text</button>
       </div>
       <div class="seg" role="group" aria-label="Before or after" id="view">
         <button type="button" data-v="before" aria-pressed="false">Before</button>
-        <button type="button" data-v="after" aria-pressed="true">Kerf</button>
+        <button type="button" data-v="after" aria-pressed="true">Katagami</button>
       </div>
       <span class="stats" id="stats" aria-live="polite"></span>
     </div>
@@ -197,9 +197,9 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
     <div class="panel">
       <header><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="where" id="where">Nothing loaded yet</span><a class="btn" id="original" href="#" target="_blank" rel="noopener" hidden>Original ↗</a></header>
       <div class="stage">
-        <iframe id="after" sandbox="allow-scripts" title="The page in Kerf"></iframe>
+        <iframe id="after" sandbox="allow-scripts" title="The page in Katagami"></iframe>
         <iframe id="before" sandbox="allow-scripts" title="The page as it was" data-off></iframe>
-        <div class="note" id="note"><div><b>Type an address above</b><p>Links inside the preview open their page in Kerf too. Scripts from the page do not run, so anything a site draws with JavaScript stays blank.</p></div></div>
+        <div class="note" id="note"><div><b>Type an address above</b><p>Links inside the preview open their page in Katagami too. Scripts from the page do not run, so anything a site draws with JavaScript stays blank.</p></div></div>
       </div>
     </div>
 
@@ -208,7 +208,7 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
       <textarea id="output" readonly spellcheck="false" aria-label="Converted HTML"></textarea>
       <footer>
         <button class="btn primary" type="button" id="copy-out">Copy HTML</button>
-        <a class="btn" id="download" download="kerf.html" href="#">Download .html</a>
+        <a class="btn" id="download" download="katagami.html" href="#">Download .html</a>
       </footer>
     </details>
 
@@ -217,13 +217,13 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
         <div>
           <h2>On the live site</h2>
           <p>The preview is a copy without the site's scripts. To convert the real page, with its scripts running and while you are signed in, run the converter inside it. It rewrites the stylesheets it can read, sweeps every element once, and converts content a single-page app adds later. Reload to undo.</p>
-          <a class="bookmarklet" id="bookmarklet" href="#">Kerf this page</a>
+          <a class="bookmarklet" id="bookmarklet" href="#">Katagami this page</a>
           <ol class="steps">
             <li>Drag the button above to your bookmarks bar.</li>
             <li>Open any site and click the bookmark.</li>
             <li>Or paste the snippet into the browser console (⌥⌘J or Ctrl+Shift+J).</li>
           </ol>
-          <p style="margin-top: 16px; font-size: 0.875rem">A site whose Content Security Policy blocks other domains' fonts or scripts can stop the bookmark or keep Kerf from loading.</p>
+          <p style="margin-top: 16px; font-size: 0.875rem">A site whose Content Security Policy blocks other domains' fonts or scripts can stop the bookmark or keep Katagami from loading.</p>
         </div>
         <div class="panel out">
           <header><b>Console snippet</b><span>the same code as the bookmark</span></header>
@@ -235,13 +235,13 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
 
     <section class="plate" id="rules">
       <h2>How it decides</h2>
-      <p>Each font stack is judged by its first family, then by its generic fallback. Kerf goes in front and the original stack stays behind it, so any character Kerf does not have falls back to the font the site had. Sites that set fonts through CSS variables are converted where the variable is defined.</p>
+      <p>Each font stack is judged by its first family, then by its generic fallback. Katagami goes in front and the original stack stays behind it, so any character Katagami does not have falls back to the font the site had. Sites that set fonts through CSS variables are converted where the variable is defined.</p>
       <div class="table-scroll">
         <table>
           <thead><tr><th>The stack starts with</th><th>Becomes</th><th>Example</th></tr></thead>
           <tbody>
-            <tr><td>A monospace family, or ends in <code>monospace</code></td><td>Kerf Mono</td><td><code>"SF Mono", Menlo, monospace</code></td></tr>
-            <tr><td>A serif family, or ends in <code>serif</code></td><td>Kerf Text</td><td><code>Georgia, serif</code></td></tr>
+            <tr><td>A monospace family, or ends in <code>monospace</code></td><td>Katagami Mono</td><td><code>"SF Mono", Menlo, monospace</code></td></tr>
+            <tr><td>A serif family, or ends in <code>serif</code></td><td>Katagami Text</td><td><code>Georgia, serif</code></td></tr>
             <tr><td>An icon or emoji font</td><td>Unchanged</td><td><code>"Material Symbols Outlined"</code></td></tr>
             <tr><td><code>var(--x)</code></td><td>Unchanged; <code>--x</code> is converted</td><td><code>--font-sans: Inter, sans-serif</code></td></tr>
             <tr><td><code>inherit</code>, <code>initial</code> or <code>unset</code></td><td>Unchanged</td><td><code>font-family: inherit</code></td></tr>
@@ -253,13 +253,13 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
     </section>
   </div>
 </main>
-<footer class="page"><div class="wrap">Kerf is free and open source under the SIL Open Font License 1.1. The converter is <a href="kerf-apply.js?v=f9fea31a1a">kerf-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Kerf-Website">Kerf website</a>.</div></footer>
+<footer class="page"><div class="wrap">Katagami is free and open source under the SIL Open Font License 1.1. The converter is <a href="katagami-apply.js?v=0b3ebce2ef">katagami-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Kerf-Website">Katagami website</a>.</div></footer>
 
-<script src="kerf-apply.js?v=f9fea31a1a"></script>
+<script src="katagami-apply.js?v=0b3ebce2ef"></script>
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
-  const K = window.KerfConvert;
+  const K = window.KatagamiConvert;
   const RELAY = new URL("/api/fetch", location.href).href;
   const FONTS = new URL("/fonts/", location.href).href;
   const state = { mode: "url", member: "sans", view: "after", source: null, scroll: 0 };
@@ -328,7 +328,7 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
       state.scroll = 0;
       if (push) {
         const q = new URLSearchParams({ url: page.url.replace(/^https:\/\//, "") });
-        if (state.member !== "sans") q.set("kerf", state.member);
+        if (state.member !== "sans") q.set("member", state.member);
         history.replaceState(null, "", `?${q}`);
       }
       render(true);
@@ -368,7 +368,7 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
     }
     const s = doc.createElement("script");
     s.textContent = FRAME_SCRIPT + (kerf && applySource
-      ? `\n${applySource}\n;KerfConvert.apply(${JSON.stringify({ sans: state.member, fontBase: FONTS })});`
+      ? `\n${applySource}\n;KatagamiConvert.apply(${JSON.stringify({ sans: state.member, fontBase: FONTS })});`
       : "");
     doc.body.append(s);
     return "<!doctype html>\n" + doc.documentElement.outerHTML;
@@ -387,9 +387,9 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
     if (downloadURL) URL.revokeObjectURL(downloadURL);
     downloadURL = URL.createObjectURL(new Blob([after.html], { type: "text/html" }));
     $("#download").href = downloadURL;
-    $("#download").download = `${src.base ? new URL(src.base).hostname : "page"}-kerf.html`;
+    $("#download").download = `${src.base ? new URL(src.base).hostname : "page"}-katagami.html`;
 
-    const counts = Object.entries(after.stats).filter(([k, v]) => v && k !== "icon").map(([k, v]) => `${v} ${k.replace("Kerf ", "")}`);
+    const counts = Object.entries(after.stats).filter(([k, v]) => v && k !== "icon").map(([k, v]) => `${v} ${k.replace("Katagami ", "")}`);
     $("#stats").textContent = `${counts.join(" · ") || "no font declarations"} · ${src.linked ? `${src.sheets.size}/${src.linked} stylesheets · ` : ""}${(src.bytes / 1024).toFixed(src.bytes < 10240 ? 1 : 0)} KB · converted in ${ms.toFixed(0)} ms`;
 
     $("#where").textContent = src.base || "Pasted HTML";
@@ -419,10 +419,10 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
   for (const f of [$("#after"), $("#before")]) f.addEventListener("load", () => f.contentWindow.postMessage({ kerf: "scrollTo", y: state.scroll }, "*"));
 
   function liveCode() {
-    const call = `KerfConvert.apply(${JSON.stringify({ sans: state.member })});`;
+    const call = `KatagamiConvert.apply(${JSON.stringify({ sans: state.member })});`;
     $("#snippet").value = `${applySource}\n${call}`;
     $("#bookmarklet").href = "javascript:" + encodeURIComponent(`(()=>{${applySource}\n${call}})();void 0`);
-    $("#bookmarklet").textContent = `Kerf this page (${K.MEMBERS[state.member]})`;
+    $("#bookmarklet").textContent = `Katagami this page (${K.MEMBERS[state.member]})`;
   }
 
   function press(group, value) {
@@ -446,7 +446,7 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
   wire("#member", (v) => {
     state.member = v;
     const q = new URLSearchParams(location.search);
-    if (v === "sans") q.delete("kerf"); else q.set("kerf", v);
+    if (v === "sans") q.delete("member"); else q.set("member", v);
     history.replaceState(null, "", q.toString() ? `?${q}` : location.pathname);
     render(false);
     liveCode();
@@ -469,8 +469,8 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
   copier("#copy-snippet", "#snippet", "Copy snippet");
 
   const q = new URLSearchParams(location.search);
-  if (K.MEMBERS[q.get("kerf")]) { state.member = q.get("kerf"); press("#member", state.member); }
-  const ready = fetch($('script[src^="kerf-apply.js?v=f9fea31a1a"]').getAttribute("src"))
+  if (K.MEMBERS[q.get("member")]) { state.member = q.get("member"); press("#member", state.member); }
+  const ready = fetch($('script[src^="katagami-apply.js?v=0b3ebce2ef"]').getAttribute("src"))
     .then((r) => r.text())
     .then((t) => { applySource = t.trim(); liveCode(); });
   if (q.get("url")) ready.then(() => loadURL(q.get("url"), false));
