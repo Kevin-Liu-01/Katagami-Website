@@ -9,7 +9,7 @@
 </head>
 <body>
 <title>Katagami Converter</title>
-<link rel="stylesheet" href="fonts/katagami.css?v=7663d93180">
+<link rel="stylesheet" href="fonts/katagami.css?v=9ce4179752">
 <style>
 /* Layout: an address bar over a browser frame. Type a site, see it in Katagami,
    flip back to compare. Pasted HTML, the bookmark and the rules sit below.
@@ -144,7 +144,7 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
       <a href="/map">Map</a>
       <a href="/convert" aria-current="page">Convert</a>
     </nav>
-    <a class="gh" href="https://github.com/Kevin-Liu-01/Kerf" target="_blank" rel="noopener">GitHub ↗</a>
+    <a class="gh" href="https://github.com/Kevin-Liu-01/Katagami" target="_blank" rel="noopener">GitHub ↗</a>
   </div>
 </header>
 
@@ -253,9 +253,9 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
     </section>
   </div>
 </main>
-<footer class="page"><div class="wrap">Katagami is free and open source under the SIL Open Font License 1.1. The converter is <a href="katagami-apply.js?v=0b3ebce2ef">katagami-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Kerf-Website">Katagami website</a>.</div></footer>
+<footer class="page"><div class="wrap">Katagami is free and open source under the SIL Open Font License 1.1. The converter is <a href="katagami-apply.js?v=d3e83f7063">katagami-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Katagami-Website">Katagami website</a>.</div></footer>
 
-<script src="katagami-apply.js?v=0b3ebce2ef"></script>
+<script src="katagami-apply.js?v=d3e83f7063"></script>
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
@@ -470,7 +470,7 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
 
   const q = new URLSearchParams(location.search);
   if (K.MEMBERS[q.get("member")]) { state.member = q.get("member"); press("#member", state.member); }
-  const ready = fetch($('script[src^="katagami-apply.js?v=0b3ebce2ef"]').getAttribute("src"))
+  const ready = fetch($('script[src^="katagami-apply.js?v=d3e83f7063"]').getAttribute("src"))
     .then((r) => r.text())
     .then((t) => { applySource = t.trim(); liveCode(); });
   if (q.get("url")) ready.then(() => loadURL(q.get("url"), false));

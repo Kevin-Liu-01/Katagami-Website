@@ -19,7 +19,7 @@ const STYLE = /^text\/css/i;
 const FONT = /^(font\/|application\/(font-|x-font-|vnd\.ms-fontobject))/i;
 const UNTYPED = /^((application|binary)\/octet-stream)?$/i;
 const FONT_FILE = /\.(woff2?|ttf|otf|eot)$/i;
-const UA = "Mozilla/5.0 (compatible; KerfConvert/1.0; +https://kerf.kevinliu.studio/convert)";
+const UA = "Mozilla/5.0 (compatible; KatagamiConvert/1.0; +https://katagami.kevinliu.studio/convert)";
 const BASE_HEADERS = {
   "access-control-allow-origin": "*",
   "access-control-expose-headers": "x-final-url, x-source-type",

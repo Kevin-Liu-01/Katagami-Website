@@ -9,7 +9,7 @@
 </head>
 <body>
 <title>Katagami Map</title>
-<link rel="stylesheet" href="fonts/katagami.css?v=7663d93180">
+<link rel="stylesheet" href="fonts/katagami.css?v=9ce4179752">
 <style>
 /* Layout: a survey sheet. A plain header, the coverage figures, then one
    full-width chart with a graticule; the letters are the data. Same tokens
@@ -115,7 +115,7 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
       <a href="/map" aria-current="page">Map</a>
       <a href="/convert">Convert</a>
     </nav>
-    <a class="gh" href="https://github.com/Kevin-Liu-01/Kerf" target="_blank" rel="noopener">GitHub ↗</a>
+    <a class="gh" href="https://github.com/Kevin-Liu-01/Katagami" target="_blank" rel="noopener">GitHub ↗</a>
   </div>
 </header>
 
@@ -174,7 +174,7 @@ input[type="checkbox"]:checked::before { transform: scale(1); }
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
-  const DATA_URL = "map/map.json?v=b31d0eb9a4";
+  const DATA_URL = "map/map.json?v=d256565fd7";
   const FAMILY = { round: '"Katagami Round"', sans: '"Katagami Sans"', text: '"Katagami Text"', mono: '"Katagami Mono"' };
   // a family's faces split by script; load the ones for every letter the map draws in it
   const loadFamily = (fam) => document.fonts.load(`400 20px ${FAMILY[fam]}`, D.charsets[fam] || "a");

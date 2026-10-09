@@ -9,7 +9,7 @@
 </head>
 <body>
 <title>Katagami Type Family</title>
-<link rel="stylesheet" href="fonts/katagami.css?v=7663d93180">
+<link rel="stylesheet" href="fonts/katagami.css?v=9ce4179752">
 <style>
 /* Layout: one long drawing sheet. A construction drawing of the name opens it; each section below is a plate on the same 12-column grid, separated by hairlines. Colors follow laser-cutter convention: red hairlines cut, blue hairlines score. */
 :root {
@@ -157,7 +157,12 @@ section.plate { border-top: 1px solid var(--rule); padding-block: 72px; }
 @media (max-width: 860px) { .plate-head { grid-template-columns: 1fr; } section.plate { padding-block: 56px; } }
 
 /* curves */
-.curves { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+.curves { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.curves .card { margin: 0; }
+.member-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.member-head b { font-size: 1.25rem; font-weight: 600; }
+.member-head span { font-family: var(--mono); font-size: var(--step--1); color: var(--cut); }
+#curves .legend { margin-top: 16px; }
 .card { border: 1px solid var(--rule); background: var(--panel); border-radius: 8px; padding: 20px; min-width: 0; }
 .card svg { display: block; width: 100%; height: auto; }
 .card figcaption { margin-top: 14px; font-size: 0.875rem; color: var(--ink-2); }
@@ -352,7 +357,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
       <a href="/map">Map</a>
       <a href="/convert">Convert</a>
     </nav>
-    <a class="gh" href="https://github.com/Kevin-Liu-01/Kerf" target="_blank" rel="noopener">GitHub ↗</a>
+    <a class="gh" href="https://github.com/Kevin-Liu-01/Katagami" target="_blank" rel="noopener">GitHub ↗</a>
   </div>
 </header>
 
@@ -417,28 +422,36 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
     <div class="wrap">
       <div class="plate-head">
         <h2>Curves</h2>
-        <p>Every quarter arc sits in a box whose corner is where its two tangents meet. The handle fraction f is how far each handle reaches toward that corner. A circle reaches 0.552 of the way. Inter reaches about 0.60. Katagami reaches 0.73 in lowercase and 0.74 in capitals, the same shape measured on Camber.</p>
+        <p>Sans, Round and Text start from the same Inter outlines and differ in how far each curve reaches toward its corner. A quarter arc sits in a box whose corner is where its two end tangents meet, and the handle fraction f is how far each handle reaches toward that corner. A circle reaches 0.552 of the way and Inter about 0.60. Sans reaches furthest, Round less far with every sharp vertex rounded, and Text stays close to Inter's curves and changes the proportions instead.</p>
       </div>
       <div class="curves">
-        <figure class="card" style="margin:0">
-          <svg id="arc" viewBox="0 0 400 300" role="img" aria-label="Three quarter arcs: a circle, Inter, and Katagami, drawn in the same box"></svg>
-          <div class="legend"><span><i style="border-color:var(--ink-2)"></i>circle 0.552</span><span><i style="border-color:var(--score)"></i>Inter 0.60</span><span><i style="border-color:var(--cut)"></i>Katagami 0.74</span></div>
-          <figcaption>f = |C1 − P0| / |K − P0|. A superellipse with exponent n has f = (2<sup>−1/n</sup> − 0.5) / 0.375.</figcaption>
+        <figure class="card member" data-fam="sans">
+          <div class="member-head"><b style="font-family:'Katagami Sans', var(--sans)">Sans</b><span class="num" data-f="sans"></span></div>
+          <svg role="img" aria-label="o and n in Katagami Sans, filled, with Inter's outlines over them"></svg>
+          <figcaption>Bowls are squared toward their corners and round letters are condensed so o matches n. The squared corners carry the area the narrower width removes, and terminals are cut level.</figcaption>
         </figure>
-        <figure class="card" style="margin:0">
-          <svg id="overlay" role="img" aria-label="Katagami O and o filled, with Inter's O and o outlined over them"></svg>
-          <div class="legend"><span><i style="border-color:var(--score)"></i>Inter outline</span><span><i style="border-color:var(--ink)"></i>Katagami fill</span></div>
-          <figcaption>Round letters are condensed so O matches H and o matches n. The squared corners carry the area the narrower width removes.</figcaption>
+        <figure class="card member" data-fam="round">
+          <div class="member-head"><b style="font-family:'Katagami Round', var(--sans)">Round</b><span class="num" data-f="round"></span></div>
+          <svg role="img" aria-label="o and n in Katagami Round, filled, with Inter's outlines over them"></svg>
+          <figcaption>Bowls are squared about two thirds as far as in Sans, on Inter's widths and spacing. Every sharp vertex is rounded with a radius of 0.22 stems, so the ends of stems are soft while the bowls stay geometric.</figcaption>
+        </figure>
+        <figure class="card member" data-fam="text">
+          <div class="member-head"><b style="font-family:'Katagami Text', var(--sans)">Text</b><span class="num" data-f="text"></span></div>
+          <svg role="img" aria-label="o and n in Katagami Text, filled, with Inter's outlines over them"></svg>
+          <figcaption>The curves stay close to Inter's. The x-height is lower, 0.71 of the cap height against Inter's 0.75, round letters are wider, spacing is tighter and the whole design is set 4 percent smaller, for long reading.</figcaption>
         </figure>
       </div>
+      <div class="legend"><span><i style="border-color:var(--ink)"></i>Katagami, filled</span><span><i style="border-color:var(--score)"></i>Inter's outline</span><span><i style="border-color:var(--cut)"></i>one quarter of o, its handles and corner</span></div>
       <div class="table-scroll" style="margin-top:32px">
         <table>
           <thead><tr><th>Source</th><th>Handle fraction f</th><th>Superellipse n</th><th>Note</th></tr></thead>
           <tbody>
             <tr><td>Circle</td><td class="n">0.552</td><td class="n">2.00</td><td class="muted">Reference</td></tr>
-            <tr><td>Inter</td><td class="n">0.60</td><td class="n">2.16</td><td class="muted">Starting outlines</td></tr>
+            <tr><td>Inter</td><td class="n" data-f="inter"></td><td class="n" data-n="inter"></td><td class="muted">Starting outlines</td></tr>
             <tr><td>Camber</td><td class="n">0.73–0.76</td><td class="n">2.68–2.84</td><td class="muted">Measured from the foundry's webfont</td></tr>
-            <tr><td>Katagami</td><td class="n">0.73–0.74</td><td class="n">2.7–2.8</td><td class="muted">Counters move 1.25 times as far, so corners keep their weight</td></tr>
+            <tr><td>Katagami Sans</td><td class="n" data-f="sans"></td><td class="n" data-n="sans"></td><td class="muted">Counters move 1.25 times as far, so corners keep their weight</td></tr>
+            <tr><td>Katagami Round</td><td class="n" data-f="round"></td><td class="n" data-n="round"></td><td class="muted">Every sharp vertex rounded at 0.22 stems</td></tr>
+            <tr><td>Katagami Text</td><td class="n" data-f="text"></td><td class="n" data-n="text"></td><td class="muted">Close to Inter's curves; lower x-height, wider rounds</td></tr>
           </tbody>
         </table>
       </div>
@@ -633,7 +646,7 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   </div>
 </footer>
 
-<script src="data.js?v=08b10adde1"></script>
+<script src="data.js?v=d797c1d4c7"></script>
 <script>
 (() => {
   const D = window.KERF;
@@ -715,16 +728,24 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   /* ---------- hero ---------- */
   const hero = $("#hero"), morphIn = $("#morph"), readout = $("#readout"), construct = $("#construct");
   const WORD = [..."Katagami"];
+  const COMPARE = "on";
   const PAD_X = 640, PAD_TOP = 260, PAD_BOT = 200;
   const LINES = [
     [M.ascender, "Ascender"], [M.capHeight, "Cap height"], [M.xHeight, "x-height"], [0, "Baseline"], [M.descender, "Descender"],
   ];
+  // The frame is sized once, for the widest the word gets, so the drawing keeps its
+  // scale and the hero keeps its height while the slider moves. Points move in
+  // straight lines between Mono, Sans and Round, so the widest is at one of the three.
+  const extent = (t) => {
+    let inkRight = 0, run = PAD_X;
+    for (const g of WORD.map((ch) => morph(ch, t))) { for (const c of g.contours) for (const p of c) inkRight = Math.max(inkRight, run + p[0]); run += g.adv; }
+    return Math.max(run, inkRight);
+  };
+  const HERO_WIDTH = Math.max(extent(0), extent(1), extent(2)) + 200;
   function drawHero() {
     const t = +morphIn.value;
     const glyphs = WORD.map((ch) => morph(ch, t));
-    let inkRight = 0, run = PAD_X;
-    for (const g of glyphs) { for (const c of g.contours) for (const p of c) inkRight = Math.max(inkRight, run + p[0]); run += g.adv; }
-    const width = Math.max(run, inkRight) + 200;
+    const width = HERO_WIDTH;
     const height = PAD_TOP + M.ascender - M.descender + PAD_BOT;
     const Y = (y) => PAD_TOP + M.ascender - y;
     hero.setAttribute("viewBox", `0 0 ${width} ${height}`);
@@ -813,48 +834,53 @@ footer .big { font-size: clamp(4rem, 16vw, 12rem); font-weight: 800; letter-spac
   $("#facts").innerHTML = facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
 
   /* ---------- curves ---------- */
-  (function arcs() {
-    const svg = $("#arc"), x0 = 60, y0 = 260, R = 200;
-    // quarter arc from (x0, y0 - R) on the left edge to (x0 + R, y0)... drawn as the top-left corner of a bowl
-    const P0 = [x0, y0], P3 = [x0 + R, y0 - R], K = [x0, y0 - R];
-    el("rect", { x: x0, y: y0 - R, width: R, height: R, fill: "none", stroke: "var(--rule)" }, svg);
-    el("polyline", { points: `${P0} ${K} ${P3}`, fill: "none", stroke: "var(--ink-2)", "stroke-dasharray": "3 4" }, svg);
-    for (const [f, color, w] of [[0.552, "var(--ink-2)", 1.5], [0.60, "var(--score)", 1.5], [0.74, "var(--cut)", 2.5]]) {
-      const C1 = [x0, y0 - R * f], C2 = [x0 + R * (1 - f), y0 - R];
-      el("path", { d: `M${P0} C${C1} ${C2} ${P3}`, fill: "none", stroke: color, "stroke-width": w }, svg);
-      if (f === 0.74) {
-        el("line", { x1: P0[0], y1: P0[1], x2: C1[0], y2: C1[1], stroke: color }, svg);
-        el("line", { x1: P3[0], y1: P3[1], x2: C2[0], y2: C2[1], stroke: color }, svg);
-        for (const c of [C1, C2]) el("circle", { cx: c[0], cy: c[1], r: 4, fill: "var(--panel)", stroke: color, "stroke-width": 1.5 }, svg);
+  (function members() {
+    const L = D.members, FAMS3 = ["sans", "round", "text"], GAP = 140, PAD = 80;
+    const width = (c) => Math.max(...c.map((p) => p[0])) - Math.min(...c.map((p) => p[0]));
+    const outer = (g) => g.contours.reduce((a, c) => (width(c) > width(a) ? c : a));
+    // mean handle fraction over the quarter arcs of o's outer contour
+    const fOf = (k) => { const fs = segments(outer(L.o[k])).map(corner).filter(Boolean).map((c) => c.f); return fs.reduce((a, b) => a + b, 0) / fs.length; };
+    const nOf = (f) => -1 / Math.log2(0.375 * f + 0.5);  // the superellipse exponent with that f
+    for (const k of ["inter", ...FAMS3]) {
+      const f = fOf(k);
+      document.querySelectorAll(`[data-f="${k}"]`).forEach((e) => (e.textContent = e.closest("table") ? f.toFixed(2) : `f ${f.toFixed(2)}`));
+      document.querySelectorAll(`[data-n="${k}"]`).forEach((e) => (e.textContent = nOf(f).toFixed(2)));
+    }
+    // one frame for all three cards, so they share a scale
+    const all = [...COMPARE].flatMap((ch) => Object.values(L[ch]).flatMap((g) => g.contours.flat()));
+    const top = Math.max(...all.map((p) => p[1])) + PAD, bot = Math.min(...all.map((p) => p[1])) - PAD;
+    const run = (k) => [...COMPARE].reduce((x, ch) => x + Math.max(L[ch][k].adv, L[ch].inter.adv) + GAP, -GAP);
+    const W = Math.max(...FAMS3.map(run)) + 2 * PAD, H = top - bot;
+    const Y = (y) => top - y;
+    function draw(fig) {
+      const k = fig.dataset.fam, svg = fig.querySelector("svg");
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      const px = W / Math.max(1, svg.clientWidth);
+      svg.replaceChildren();
+      const xh = D[k].metrics.xHeight;
+      for (const y of [0, xh]) el("line", { x1: 0, x2: W, y1: Y(y), y2: Y(y), stroke: "var(--rule)", "stroke-width": px }, svg);
+      let ox = PAD + (W - 2 * PAD - run(k)) / 2;
+      for (const ch of COMPARE) {
+        const m = L[ch][k], i = L[ch].inter, w = Math.max(m.adv, i.adv);
+        const mx = ox + (w - m.adv) / 2, ix = ox + (w - i.adv) / 2;
+        el("path", { d: pathData(m.contours, mx, Y), fill: "var(--ink)" }, svg);
+        el("path", { d: pathData(i.contours, ix, Y), fill: "none", stroke: "var(--score)", "stroke-width": 1.5 * px }, svg);
+        if (ch === "o") {
+          // the top-right quarter arc: its corner, its handles and its ends
+          const s = segments(outer(m)).reduce((a, b) => (a.p0[0] + a.p3[0] + a.p0[1] + a.p3[1] > b.p0[0] + b.p3[0] + b.p0[1] + b.p3[1] ? a : b));
+          const c = corner(s), P = (p) => [mx + p[0], Y(p[1])];
+          if (c) el("polyline", { points: [P(s.p0), P(c.k), P(s.p3)].join(" "), fill: "none", stroke: "var(--cut)", "stroke-width": px, "stroke-dasharray": `${3 * px} ${3 * px}` }, svg);
+          el("line", { x1: P(s.p0)[0], y1: P(s.p0)[1], x2: P(s.offs[0])[0], y2: P(s.offs[0])[1], stroke: "var(--cut)", "stroke-width": 1.5 * px }, svg);
+          el("line", { x1: P(s.p3)[0], y1: P(s.p3)[1], x2: P(s.offs[1])[0], y2: P(s.offs[1])[1], stroke: "var(--cut)", "stroke-width": 1.5 * px }, svg);
+          for (const o of s.offs) el("circle", { cx: P(o)[0], cy: P(o)[1], r: 4 * px, fill: "var(--panel)", stroke: "var(--cut)", "stroke-width": 1.5 * px }, svg);
+          for (const q of [s.p0, s.p3]) el("rect", { x: P(q)[0] - 4 * px, y: P(q)[1] - 4 * px, width: 8 * px, height: 8 * px, fill: "var(--cut)" }, svg);
+        }
+        ox += w + GAP;
       }
     }
-    const lab = (p, s, dx, dy) => { const t = el("text", { x: p[0] + dx, y: p[1] + dy, "font-family": "Katagami Mono, ui-monospace, monospace", "font-size": 12, fill: "var(--ink-2)" }, svg); t.textContent = s; };
-    for (const p of [P0, P3]) el("rect", { x: p[0] - 4, y: p[1] - 4, width: 8, height: 8, fill: "var(--score)" }, svg);
-    el("path", { d: `M${K[0] - 6} ${K[1]} h12 M${K[0]} ${K[1] - 6} v12`, stroke: "var(--ink)" }, svg);
-    lab(P0, "P0", -28, 4); lab(P3, "P3", 8, -8); lab(K, "K", -20, -8);
-    lab([x0, y0 - R * 0.74], "C1", -30, 4);
-  })();
-
-  (function overlay() {
-    const svg = $("#overlay");
-    const chars = ["O", "o"], gap = 160;
-    const pad = 120, top = M.capHeight + 60, bot = -60;
-    let ox = pad;
-    const Y = (y) => top - y;
-    const parts = [];
-    for (const ch of chars) {
-      const A = D.outlines[ch].inter, B = D.outlines[ch].kerf;
-      parts.push({ A, B, ox });
-      ox += Math.max(A.adv, B.adv) + gap;
-    }
-    const W = ox - gap + pad, H = top - bot;
-    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-    for (const y of [M.capHeight, M.xHeight, 0]) el("line", { x1: 0, x2: W, y1: Y(y), y2: Y(y), stroke: "var(--rule)", "stroke-width": 4 }, svg);
-    for (const { A, B, ox } of parts) {
-      const dx = (Math.max(A.adv, B.adv) - B.adv) / 2, ax = (Math.max(A.adv, B.adv) - A.adv) / 2;
-      el("path", { d: pathData(B.contours, ox + dx, Y), fill: "var(--ink)" }, svg);
-      el("path", { d: pathData(A.contours, ox + ax, Y), fill: "none", stroke: "var(--score)", "stroke-width": 8 }, svg);
-    }
+    const figs = document.querySelectorAll("#curves .member");
+    const ro = new ResizeObserver(() => figs.forEach(draw));
+    figs.forEach((f) => ro.observe(f.querySelector("svg")));
   })();
 
   /* ---------- family ladders ---------- */
