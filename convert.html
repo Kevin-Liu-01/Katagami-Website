@@ -9,7 +9,7 @@
 </head>
 <body>
 <title>Katagami Converter</title>
-<link rel="stylesheet" href="fonts/katagami.css?v=44b62710d0">
+<link rel="stylesheet" href="fonts/katagami.css?v=ee846fe932">
 <style>
 /* Layout: an address bar over a browser frame. Type a site, see it in Katagami,
    flip back to compare. Pasted HTML, the bookmark and the rules sit below.
@@ -253,9 +253,9 @@ footer.page { border-top: 1px solid var(--rule); padding-block: 32px 56px; font-
     </section>
   </div>
 </main>
-<footer class="page"><div class="wrap">Katagami is free and open source under the SIL Open Font License 1.1. The converter is <a href="katagami-apply.js?v=20188f15c8">katagami-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Katagami-Website">Katagami website</a>.</div></footer>
+<footer class="page"><div class="wrap">Katagami is free and open source under the SIL Open Font License 1.1. The converter is <a href="katagami-apply.js?v=899f941f6d">katagami-apply.js</a>, part of the <a href="https://github.com/Kevin-Liu-01/Katagami-Website">Katagami website</a>.</div></footer>
 
-<script src="katagami-apply.js?v=20188f15c8"></script>
+<script src="katagami-apply.js?v=899f941f6d"></script>
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
@@ -470,7 +470,7 @@ if(/^https?:/.test(a.href))parent.postMessage({kerf:"go",href:a.href},"*")},true
 
   const q = new URLSearchParams(location.search);
   if (K.MEMBERS[q.get("member")]) { state.member = q.get("member"); press("#member", state.member); }
-  const ready = fetch($('script[src^="katagami-apply.js?v=20188f15c8"]').getAttribute("src"))
+  const ready = fetch($('script[src^="katagami-apply.js?v=899f941f6d"]').getAttribute("src"))
     .then((r) => r.text())
     .then((t) => { applySource = t.trim(); liveCode(); });
   if (q.get("url")) ready.then(() => loadURL(q.get("url"), false));
